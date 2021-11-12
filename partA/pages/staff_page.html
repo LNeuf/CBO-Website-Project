@@ -76,12 +76,14 @@
                                 var lnameCell = row.insertCell();
                                 var roleCell = row.insertCell();
                                 var dateCell = row.insertCell();
+                                var editCell = row.insertCell();
 
                                 idcell.innerHTML = response.answer[i].ID;
                                 fnameCell.innerHTML = response.answer[i].firstname;
                                 lnameCell.innerHTML = response.answer[i].lastname;
                                 roleCell.innerHTML = response.answer[i].role;
                                 dateCell.innerHTML = response.answer[i].joindate;
+                                editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="staff_edit('+ response.answer[i].ID + ')">Edit</button>';
                             }
                         }
                     }
@@ -90,6 +92,11 @@
 
             http.send("refresh");
         };
+
+        function staff_edit(staff_ID) {
+            alert(staff_ID);
+        }
+
     </script>
 
     <h1>Staff Page</h1>
