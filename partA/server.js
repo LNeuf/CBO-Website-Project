@@ -37,6 +37,16 @@ app.post('/registerstaff', (req, res) => {
 	});
 });
 
+// app.post('/changestaff', (req, res) => {
+// 	var query_string = "UPDATE staff " + ;
+// 	config.query(query_string, function (err, result) {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		res.send("Staff changed!");
+// 	})
+// })
+
 app.post('/refreshstaff', (req,res) => {
 	var response = new Object();
 	if (req.body == undefined) {

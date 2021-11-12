@@ -1,74 +1,127 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <script>
-            function register_staff() {
-                var http = new XMLHttpRequest();
-                var url = '/registerstaff';
-                var message = "fname=" + document.getElementById("staff_fname").value + "&lname=" + document.getElementById("staff_lname").value + "&role=" + document.getElementById("staff_role").value;
 
-                http.open('POST', url, true);
+<body>
+    <script>
+        function register_staff() {
+            var http = new XMLHttpRequest();
+            var url = '/registerstaff';
+            var message = "fname=" + document.getElementById("staff_fname").value + "&lname=" + document.getElementById("staff_lname").value + "&role=" + document.getElementById("staff_role").value;
 
-                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.open('POST', url, true);
 
-                http.onreadystatechange = function() 
-                { 
-                    if(http.readyState == 4) 
-                    {
-                        if (http.status == 200) {
-                            var response = JSON.parse(http.responseText);
-                            alert(response);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        alert(response);
+                    }
+                    else {
+                        alert("Registration failure!");
+                    }
+                }
+            };
+
+            http.send(message);
+        };
+
+        // function change_staff() {
+        //     var http = new XMLHttpRequest();
+        //     var url = '/changestaff';
+        //     var message = "changeid=";
+
+        //     http.open('POST', url, true);
+
+        //     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        //     http.onreadystatechange = function () {
+        //         if (http.readyState == 4) {
+        //             if (http.status == 200) {
+        //                 var response = JSON.parse(http.responseText);
+        //                 alert(response);
+        //             }
+        //             else {
+        //                 alert("Registration failure!");
+        //             }
+        //         }
+        //     };
+
+        //     http.send(message);
+        // };
+
+        function refresh_staff_list() {
+            var http = new XMLHttpRequest();
+            var url = '/refreshstaff';
+
+            http.open('POST', url, true);
+
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        // document.getElementById("staff_display").value = "";
+                        if (response.answer == "No staff!") {
+                            alert("No staff!");
+                            // document.getElementById("staff_display").value = "No staff!";
                         }
                         else {
-                            alert("Registration failure!");
+                            // document.getElementById("display_table").getElementsByTagName("tbody") = document.createElement('tbody');
+                            document.getElementById("display_tbody").innerHTML = "";
+                            var tbodyRef = document.getElementById("display_table").getElementsByTagName("tbody")[0];
+                            for (let i = 0; i < response.answer.length; i++) {
+                                var row = tbodyRef.insertRow();
+                                var idcell = row.insertCell();
+                                var fnameCell = row.insertCell();
+                                var lnameCell = row.insertCell();
+                                var roleCell = row.insertCell();
+                                var dateCell = row.insertCell();
+
+                                idcell.innerHTML = response.answer[i].ID;
+                                fnameCell.innerHTML = response.answer[i].firstname;
+                                lnameCell.innerHTML = response.answer[i].lastname;
+                                roleCell.innerHTML = response.answer[i].role;
+                                dateCell.innerHTML = response.answer[i].joindate;
                         }
                     }
-                };
-
-                http.send(message);
+                }
             };
 
-            function refresh_staff_list() {
-                var http = new XMLHttpRequest();
-                var url = '/refreshstaff';
+            http.send("refresh");
+        };
+    </script>
 
-                http.open('POST', url, true);
-
-                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-                http.onreadystatechange = function() 
-                { 
-                    if(http.readyState == 4) 
-                    {
-                        if (http.status == 200) {
-                            var response = JSON.parse(http.responseText);
-                            document.getElementById("staff_display").value = "";
-                            if (response.answer == "No staff!") {
-                                document.getElementById("staff_display").value = "No staff!";
-                            }
-                            else {
-                                for (let i=0; i<response.answer.length; i++) {
-                                    document.getElementById("staff_display").value += "ID: " + response.answer[i].ID + "   FIRST NAME: " + response.answer[i].firstname + "   LAST NAME: " + response.answer[i].lastname + "   ROLE: " + response.answer[i].role + "   JOIN DATE: " + response.answer[i].joindate + "\n";
-                                }
-                            }
-                        }
-                    }
-                };
-
-                http.send("refresh");
-            };
-        </script>
-
-        <h1>Staff Page</h1>
-
+    <h1>Staff Page</h1>
+    <div id="staff_registation_div">
         <label>Register New Staff</label><br><br>
         <input id="staff_fname" type="text" name="staff_fname" placeholder="First Name">
         <input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name">
         <input id="staff_role" type="text" name="staff_role" placeholder="Role"><br><br>
         <button onclick="register_staff()">Register</button><br><br><br><br>
-
+    </div>
+    <div id="staff_edit_div">
+        <label>Edit Staff</label><br><br>
+        <input id="target_id" type="text" name="target_id" placeholder="ID of staff to edit">
+    </div>
+    <div id="staff_display_div">
         <label for="staff_display">Staff Display</label><br><br>
         <button onclick="refresh_staff_list()">Refresh Staff List</button><br><br>
-        <textarea readonly name="staff_display" id="staff_display" cols="150" rows="30"></textarea>
-    </body>
+        <table border="1px solid black" id="display_table">
+            <thead>
+                <th>Staff ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Role</th>
+                <th>Date Joined</th>
+            </thead>
+            <tbody id="display_tbody">
+            </tbody>
+        </table>
+        <!-- <textarea readonly name="staff_display" id="staff_display" cols="150" rows="30"></textarea> -->
+    </div>
+</body>
+
 </html>
