@@ -63,13 +63,10 @@
                 if (http.readyState == 4) {
                     if (http.status == 200) {
                         var response = JSON.parse(http.responseText);
-                        // document.getElementById("staff_display").value = "";
                         if (response.answer == "No staff!") {
                             alert("No staff!");
-                            // document.getElementById("staff_display").value = "No staff!";
                         }
                         else {
-                            // document.getElementById("display_table").getElementsByTagName("tbody") = document.createElement('tbody');
                             document.getElementById("display_tbody").innerHTML = "";
                             var tbodyRef = document.getElementById("display_table").getElementsByTagName("tbody")[0];
                             for (let i = 0; i < response.answer.length; i++) {
@@ -85,6 +82,7 @@
                                 lnameCell.innerHTML = response.answer[i].lastname;
                                 roleCell.innerHTML = response.answer[i].role;
                                 dateCell.innerHTML = response.answer[i].joindate;
+                            }
                         }
                     }
                 }
@@ -120,7 +118,6 @@
             <tbody id="display_tbody">
             </tbody>
         </table>
-        <!-- <textarea readonly name="staff_display" id="staff_display" cols="150" rows="30"></textarea> -->
     </div>
 </body>
 
