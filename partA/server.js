@@ -54,8 +54,8 @@ app.post('/deletestaff', (req, res) => {
 			console.log(err);
 		}
 		res.send("Staff with ID: " + req.body.ID + " deleted");
-	})
-})
+	});
+});
 
 app.post('/refreshstaff', (req,res) => {
 	var response = new Object();
