@@ -47,6 +47,16 @@ app.post('/registerstaff', (req, res) => {
 // 	})
 // })
 
+app.post('/deletestaff', (req, res) => {
+	var query_string = "DELETE FROM staff where ID=" + req.body.ID;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+		}
+		res.send("Staff with ID: " + req.body.ID + " deleted");
+	})
+})
+
 app.post('/refreshstaff', (req,res) => {
 	var response = new Object();
 	if (req.body == undefined) {
