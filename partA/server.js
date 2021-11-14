@@ -37,15 +37,51 @@ app.post('/registerstaff', (req, res) => {
 	});
 });
 
-// app.post('/changestaff', (req, res) => {
-// 	var query_string = "UPDATE staff " + ;
+app.post('/editstaff', (req, res) => {
+	var set_string = "";
+	if (req.body.first_name == "" && req.body.last_name == "" && req.body.role == "") {
+		return;
+	}
+
+	if (req.body.first_name != "") {
+		set_string += "firstname = '" + req.body.first_name + "', ";
+	}
+	if (req.body.last_name != "") {
+		set_string += "lastname = '" + req.body.last_name + "', ";
+	}
+	if (req.body.role != "") {
+		set_string += "role = '" + req.body.role + "'"
+	}
+
+	if (set_string.slice(-2).normalize === ",") {
+		console.log("hey");
+		set_string = set_string.substring(0, set_string.length - 2);
+	}
+
+	var query_string = "UPDATE staff SET " + set_string + " WHERE ID=" + req.body.id;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+		}
+	})
+});
+
+// app.get('/changetoeditstaff', (req, res) => {
+// 	var changeID = encodeURIComponent(req.body.changeid);
+// 	console.log(req.body.changeID);
+// 	var query_string = "SELECT * FROM staff WHERE ID=" + req.body.changeid;
+// 	var response = new Object();
 // 	config.query(query_string, function (err, result) {
 // 		if (err) {
 // 			console.log(err);
 // 		}
-// 		res.send("Staff changed!");
-// 	})
-// })
+// 		var resultArray = JSON.parse(JSON.stringify(result));
+// 		response.answer = resultArray;
+// 		var stringified = JSON.stringify(response);
+// 		res.redirect('http://localhost/staff_edit_page.html?id=' + changeID + "&fname=" + stringified.answer.firstname + "&lname=" + stringified.answer.lastname + "&role=" + stringified.answer.role);
+// 	});
+// });
+
 
 app.post('/deletestaff', (req, res) => {
 	var query_string = "DELETE FROM staff where ID=" + req.body.ID;

@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html>
 
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        border: 3px solid #f1f1f1;
+        background-color: darkgrey;
+        z-index: 9;
+    }
+</style>
+
 <body>
     <script>
         function register_staff() {
@@ -16,7 +30,7 @@
                 if (http.readyState == 4) {
                     if (http.status == 200) {
                         var response = JSON.parse(http.responseText);
-                        alert(response);
+                        alert(response.answer);
                     }
                     else {
                         alert("Registration failure!");
@@ -83,18 +97,29 @@
                                 lnameCell.innerHTML = response.answer[i].lastname;
                                 roleCell.innerHTML = response.answer[i].role;
                                 dateCell.innerHTML = response.answer[i].joindate;
-                                editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="staff_edit('+ response.answer[i].ID + ')">Edit</button>';
+
+                                var button_onclick = response.answer[i].ID + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].role + "'";
+                                editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
                             }
                         }
                     }
                 }
             };
-
             http.send("refresh");
+
         };
 
-        function staff_edit(staff_ID) {
-            alert(staff_ID);
+        function openEdit(staff_ID, first_name, last_name, role) {
+            document.getElementById("popup_header").innerText = "Edit Staff " + staff_ID;
+            document.getElementById("first_name").placeholder = first_name;
+            document.getElementById("last_name").placeholder = last_name;
+            document.getElementById("role").placeholder = role;
+            document.getElementById("staff_edit_popup").style.display = "block";
+            document.getElementById("id").value = staff_ID;
+        }
+
+        function closeEdit() {
+            document.getElementById("staff_edit_popup").style.display = "none";
         }
 
     </script>
@@ -106,10 +131,6 @@
         <input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name">
         <input id="staff_role" type="text" name="staff_role" placeholder="Role"><br><br>
         <button onclick="register_staff()">Register</button><br><br><br><br>
-    </div>
-    <div id="staff_edit_div">
-        <label>Edit Staff</label><br><br>
-        <input id="target_id" type="text" name="target_id" placeholder="ID of staff to edit">
     </div>
     <div id="staff_display_div">
         <label for="staff_display">Staff Display</label><br><br>
@@ -125,6 +146,22 @@
             <tbody id="display_tbody">
             </tbody>
         </table>
+    </div>
+
+    <div id="staff_edit_popup" class="popup">
+        <form action="/editstaff" method="post">
+            <h1 id="popup_header">Edit Staff </h1>
+            <label for="first_name">First Name</label>
+            <input id="first_name" type="text" name="first_name"> <br><br>
+            <label for="last_name">Last Name</label>
+            <input id="last_name" type="text" name="last_name"> <br><br>
+            <label for="role">Role</label>
+            <input id="role" type="text" name="role"> <br><br>
+            <input type="hidden" id="id" name="id">
+
+            <button type="submit">Submit</button>
+            <button type="button" onclick="closeEdit()">Close</button>
+        </form>
     </div>
 </body>
 
