@@ -1,19 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<style>
-    .popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50%;
-        border: 3px solid #f1f1f1;
-        background-color: darkgrey;
-        z-index: 9;
-    }
-</style>
+<head>
+	<title> Staff </title>
+	<link rel="stylesheet" href="../Style/CBOStyle.css">
+</head>
 
 <body>
     <script>
@@ -124,7 +115,15 @@
 
     </script>
 
-    <h1>Staff Page</h1>
+	<div class=header>
+		<h1> Staff </h1>
+	</div>
+
+    <div class="navBar">
+	<a href="customer_page.html"> Customers </a>
+	<a href="staff_page.html"> Staff </a>
+	</div>
+	
     <div id="staff_registation_div">
         <label>Register New Staff</label><br><br>
         <input id="staff_fname" type="text" name="staff_fname" placeholder="First Name">
@@ -132,6 +131,7 @@
         <input id="staff_role" type="text" name="staff_role" placeholder="Role"><br><br>
         <button onclick="register_staff()">Register</button><br><br><br><br>
     </div>
+	
     <div id="staff_display_div">
         <label for="staff_display">Staff Display</label><br><br>
         <button onclick="refresh_staff_list()">Refresh Staff List</button><br><br>
