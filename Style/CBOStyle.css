@@ -1,0 +1,54 @@
+
+*
+{
+	font-family: Arial, sans-serrif;
+}
+
+.header
+{
+	padding: 60px;
+	text-align: left;
+	background: red;
+	color: gold;
+}
+
+.header h1
+{
+	font-size: 60px;
+}
+
+.navBar
+{
+	overflow: hidden;
+	background: gold;
+}
+
+.navBar a
+{
+	float: right;
+	display: block;
+	color: red;
+	font-size: 20px;
+	text-align: center;
+	padding: 14px 20px;
+	text-decoration: none;
+}
+
+.navBar a:hover
+{
+	background-color: red;
+	color: gold;
+}
+
+.popup
+{
+	display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    border: 3px solid #f1f1f1;
+    background-color: darkgrey;
+    z-index: 9;
+}
