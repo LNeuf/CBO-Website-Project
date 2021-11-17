@@ -76,6 +76,7 @@ app.post('/deletestaff', (req, res) => {
 	});
 });
 
+/* Sends the latest contents */
 app.get('/refreshstaff', (req, res) => {
 	var response = new Object();
 	var query_string = "SELECT * FROM staff;";
@@ -94,7 +95,7 @@ app.get('/refreshstaff', (req, res) => {
 });
 
 
-
+app.use(express.static(__dirname + '/Style'));
 app.use('/', express.static('pages'));
 
 app.listen(PORT, HOST);
