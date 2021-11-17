@@ -66,23 +66,6 @@ app.post('/editstaff', (req, res) => {
 	})
 });
 
-// app.get('/changetoeditstaff', (req, res) => {
-// 	var changeID = encodeURIComponent(req.body.changeid);
-// 	console.log(req.body.changeID);
-// 	var query_string = "SELECT * FROM staff WHERE ID=" + req.body.changeid;
-// 	var response = new Object();
-// 	config.query(query_string, function (err, result) {
-// 		if (err) {
-// 			console.log(err);
-// 		}
-// 		var resultArray = JSON.parse(JSON.stringify(result));
-// 		response.answer = resultArray;
-// 		var stringified = JSON.stringify(response);
-// 		res.redirect('http://localhost/staff_edit_page.html?id=' + changeID + "&fname=" + stringified.answer.firstname + "&lname=" + stringified.answer.lastname + "&role=" + stringified.answer.role);
-// 	});
-// });
-
-
 app.post('/deletestaff', (req, res) => {
 	var query_string = "DELETE FROM staff where ID=" + req.body.ID;
 	config.query(query_string, function (err, result) {
@@ -93,27 +76,23 @@ app.post('/deletestaff', (req, res) => {
 	});
 });
 
-app.post('/refreshstaff', (req,res) => {
+app.get('/refreshstaff', (req, res) => {
 	var response = new Object();
-	if (req.body == undefined) {
-		response.answer = "No staff!";
-	}
-	else {
-		var query_string = "SELECT * FROM staff;";
-		console.log(query_string);
+	var query_string = "SELECT * FROM staff;";
+	console.log(query_string);
 
-		config.query(query_string, function (err, result) {
-			if (err) {
-				console.log(err);
-				response.answer = "No staff!";
-				res.send(JSON.stringify(response));
-			}
-			var resultArray = JSON.parse(JSON.stringify(result));
-			response.answer = resultArray;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "No staff!";
 			res.send(JSON.stringify(response));
-		});
-	}
-})
+		}
+		var resultArray = JSON.parse(JSON.stringify(result));
+		response.answer = resultArray;
+		res.send(JSON.stringify(response));
+	});
+});
+
 
 
 app.use('/', express.static('pages'));
