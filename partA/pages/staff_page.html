@@ -76,6 +76,31 @@
 
         };
 
+        function deleteStaff() {
+            var http = new XMLHttpRequest();
+            var url = '/deletestaff';
+
+            var message = "delete_id=" + document.getElementById("id").value;
+
+            http.open('DELETE', url, true);
+
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        alert(response.answer);
+                    }
+                    else {
+                        alert("Failed to delete");
+                    }
+                }
+            };
+
+            http.send(message);
+        };
+        
         function openEdit(staff_ID, first_name, last_name, role) {
             document.getElementById("popup_header").innerText = "Edit Staff " + staff_ID;
             document.getElementById("first_name").placeholder = first_name;
@@ -135,6 +160,7 @@
             <input id="role" type="text" name="role"> <br><br>
             <input type="hidden" id="id" name="id">
 
+            <button type="button" onclick="deleteStaff()">Delete Staff Member</button>
             <button type="submit">Submit</button>
             <button type="button" onclick="closeEdit()">Close</button>
         </form>

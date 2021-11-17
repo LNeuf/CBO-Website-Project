@@ -37,7 +37,8 @@ app.post('/registerstaff', (req, res) => {
 	});
 });
 
-app.post('/editstaff', (req, res) => {
+app.put('/editstaff', (req, res) => {
+	var response = new Object();
 	var set_string = "";
 	if (req.body.first_name == "" && req.body.last_name == "" && req.body.role == "") {
 		return;
@@ -54,7 +55,6 @@ app.post('/editstaff', (req, res) => {
 	}
 
 	if (set_string.slice(-2).normalize === ",") {
-		console.log("hey");
 		set_string = set_string.substring(0, set_string.length - 2);
 	}
 
@@ -66,13 +66,13 @@ app.post('/editstaff', (req, res) => {
 	})
 });
 
-app.post('/deletestaff', (req, res) => {
-	var query_string = "DELETE FROM staff where ID=" + req.body.ID;
+app.delete('/deletestaff', (req, res) => {
+	var query_string = "DELETE FROM staff where ID=" + req.body.delete_id;
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
 		}
-		res.send("Staff with ID: " + req.body.ID + " deleted");
+		res.send("Staff with ID: " + req.body.delete_id + " deleted");
 	});
 });
 
@@ -89,7 +89,14 @@ app.get('/refreshstaff', (req, res) => {
 			res.send(JSON.stringify(response));
 		}
 		var resultArray = JSON.parse(JSON.stringify(result));
-		response.answer = resultArray;
+
+		if (resultArray == "") {
+			response.answer = "No staff!";
+		}
+		else {
+			response.answer = resultArray;
+		}
+		
 		res.send(JSON.stringify(response));
 	});
 });
