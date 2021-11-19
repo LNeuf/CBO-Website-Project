@@ -40,9 +40,6 @@ app.post('/registerstaff', (req, res) => {
 app.put('/editstaff', (req, res) => {
 	var response = new Object();
 	var set_string = "";
-	if (req.body.first_name == "" && req.body.last_name == "" && req.body.role == "") {
-		return;
-	}
 
 	if (req.body.first_name != "") {
 		set_string += "firstname = '" + req.body.first_name + "', ";
@@ -59,24 +56,30 @@ app.put('/editstaff', (req, res) => {
 	}
 
 	var query_string = "UPDATE staff SET " + set_string + " WHERE ID=" + req.body.id;
+	console.log(query_string);
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
+			response.answer = "Error updating staff";
 		}
+		response.answer = "Successfully updated staff with ID: " + req.body.id;
+		res.send(JSON.stringify(response));
 	})
 });
 
 app.delete('/deletestaff', (req, res) => {
+	var response = new Object();
 	var query_string = "DELETE FROM staff where ID=" + req.body.delete_id;
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
 		}
-		res.send("Staff with ID: " + req.body.delete_id + " deleted");
+		response.answer = "Staff with ID: " + req.body.delete_id + " deleted";
+		res.send(JSON.stringify(response));
 	});
 });
 
-/* Sends the latest contents */
+/* Sends the latest content */
 app.get('/refreshstaff', (req, res) => {
 	var response = new Object();
 	var query_string = "SELECT * FROM staff;";
