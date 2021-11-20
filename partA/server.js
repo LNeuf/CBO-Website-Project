@@ -26,6 +26,28 @@ app.get('/connect', (req, res) => {
 	});
 });
 
+app.get('/isdbinit', (req, res) => {
+	var response = new Object();
+	var query_string = "SELECT count(*) FROM information_schema.tables WHERE (table_schema = 'cbo_db') AND (table_name ='staff');"
+	console.log(query_string);
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+		}
+		var parsed_result = JSON.parse(JSON.stringify(result));
+		console.log(parsed_result);
+		console.log(parsed_result[0]['count(*)']);
+		if (parsed_result[0]["count(*)"] == 1) {
+			response.answer = "Yes";
+		}
+		else {
+			response.answer = "No";
+		}
+		res.send(response);
+		
+	})
+});
+
 app.post('/registerstaff', (req, res) => {
 	var file_output = "INSERT INTO staff (firstname, lastname, role, joindate) VALUES ('" + req.body.fname + "', '" + req.body.lname + "', '" + req.body.role + "', '" + new Date() + "');";
 	console.log(file_output);

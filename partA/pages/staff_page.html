@@ -8,7 +8,31 @@
 
 <body>
     <script>
-        // setInterval(refresh_staff_list, 1000);
+        var check_db = setInterval(is_db_initialized, 1000);
+        
+        function is_db_initialized() {
+            var http = new XMLHttpRequest();
+            var url = '/isdbinit';
+            
+            http.open('GET', url, true);
+
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        if (response.answer == "Yes") {
+                            setInterval(refresh_staff_list, 1000);
+                            clearInterval(check_db);
+                        }
+                    }
+                }
+            };
+
+            http.send("page_type=staff");
+        };
+
         function register_staff() {
             var http = new XMLHttpRequest();
             var url = '/registerstaff';
@@ -48,7 +72,7 @@
                         var response = JSON.parse(http.responseText);
                         if (response.answer == "No staff!") {
                             document.getElementById("display_tbody").innerHTML = "";
-                            alert("No staff!");
+                            document.getElementById("display_table").display = "none";
                         }
                         else {
                             document.getElementById("display_tbody").innerHTML = "";
