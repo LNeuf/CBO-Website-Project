@@ -13,6 +13,8 @@ CREATE TABLE customers (
 ID int NOT NULL AUTO_INCREMENT,
 firstname varchar(255),
 lastname varchar(255) NOT NULL,
+birthday varchar(255) NOT NULL,
+address varchar(255),
 joindate varchar(255),
 PRIMARY KEY (ID)
 );

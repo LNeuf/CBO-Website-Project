@@ -1,21 +1,249 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 	<title> Customers </title>
-	<link rel="stylesheet" type="text/css" href="CBOStyle.css"/>
+	<link rel="stylesheet" type="text/css" href="CBOStyle.css" />
 </head>
 
 <body>
+	<script>
+		var check_db = setInterval(is_db_initialized, 1000);
+
+		function is_db_initialized() {
+			var http = new XMLHttpRequest();
+			var url = '/isdbinit';
+
+			http.open('GET', url, true);
+
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+			http.onreadystatechange = function () {
+				if (http.readyState == 4) {
+					if (http.status == 200) {
+						var response = JSON.parse(http.responseText);
+						if (response.answer == "Yes") {
+							setInterval(refresh_customer_list, 1000);
+							clearInterval(check_db);
+						}
+					}
+				}
+			};
+
+			http.send("page_type=staff");
+		};
+
+		function register_customer() {
+			var http = new XMLHttpRequest();
+			var url = '/registercustomer';
+			var message = "fname=" + document.getElementById("customer_fname").value + "&lname=" + document.getElementById("customer_lname").value + "&birthday=" + document.getElementById("customer_birthday").value + "&address=" + document.getElementById("customer_address").value;
+
+			http.open('POST', url, true);
+
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+			http.onreadystatechange = function () {
+				if (http.readyState == 4) {
+					if (http.status == 200) {
+						var response = JSON.parse(http.responseText);
+						alert(response.answer);
+					}
+					else {
+						alert("Registration failure!");
+					}
+				}
+			};
+
+			http.send(message);
+		};
+
+		function refresh_customer_list() {
+
+			var http = new XMLHttpRequest();
+			var url = '/refreshcustomers';
+
+			http.open('GET', url, true);
+
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			http.onreadystatechange = function () {
+				if (http.readyState == 4) {
+					if (http.status == 200) {
+						var response = JSON.parse(http.responseText);
+						if (response.answer == "No customers!") {
+							document.getElementById("display_tbody").innerHTML = "";
+							document.getElementById("display_table").display = "none";
+						}
+						else {
+							document.getElementById("display_tbody").innerHTML = "";
+							var tbodyRef = document.getElementById("display_table").getElementsByTagName("tbody")[0];
+							for (let i = 0; i < response.answer.length; i++) {
+								var row = tbodyRef.insertRow();
+								var idcell = row.insertCell();
+								var fnameCell = row.insertCell();
+								var lnameCell = row.insertCell();
+								var birthdayCell = row.insertCell();
+								var addressCell = row.insertCell();
+								var dateCell = row.insertCell();
+								var editCell = row.insertCell();
+
+								idcell.innerHTML = response.answer[i].ID;
+								fnameCell.innerHTML = response.answer[i].firstname;
+								lnameCell.innerHTML = response.answer[i].lastname;
+								birthdayCell.innerHTML = response.answer[i].birthday;
+								addressCell.innerHTML = response.answer[i].address;
+								dateCell.innerHTML = response.answer[i].joindate;
+
+								var button_onclick = response.answer[i].ID + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].birthday + "', '" + response.answer[i].address + "'";
+								editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
+							}
+						}
+					}
+				}
+			};
+			http.send();
+		};
+
+		function deleteCustomer() {
+			var http = new XMLHttpRequest();
+			var url = '/deletecustomer';
+
+			var message = "delete_id=" + document.getElementById("id").value;
+
+			http.open('DELETE', url, true);
+
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+			http.onreadystatechange = function () {
+				if (http.readyState == 4) {
+					if (http.status == 200) {
+						var response = JSON.parse(http.responseText);
+						alert(response.answer);
+						closeEdit();
+					}
+					else {
+						alert("Failed to delete");
+					}
+				}
+			};
+
+			http.send(message);
+		};
+
+		function editCustomer() {
+			var http = new XMLHttpRequest();
+			var url = '/editcustomer';
+
+			var message = "first_name=" + document.getElementById("first_name").value + "&last_name=" + document.getElementById("last_name").value + "&role=" + document.getElementById("role").value + "&id=" + document.getElementById("id").value;
+
+			http.open('PUT', url, true);
+
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			http.onreadystatechange = function () {
+				if (http.readyState == 4) {
+					if (http.status == 200) {
+						var response = JSON.parse(http.responseText);
+						alert(response.answer);
+						closeEdit();
+					}
+					else {
+						alert("Failed to delete");
+					}
+				}
+			};
+
+			http.send(message);
+		};
+
+		// Variables to reset the edit data
+        var first_name_mem;
+        var last_name_mem;
+        var birthday_mem;
+		var address_mem;
+
+        function openEdit(ID, first_name, last_name, birthday, address) {
+            first_name_mem = first_name;
+            last_name_mem = last_name;
+            birthday_mem = birthday;
+			address_mem = address;
+
+            document.getElementById("popup_header").innerText = "Edit Customer " + ID;
+            document.getElementById("first_name").value = first_name;
+            document.getElementById("last_name").value = last_name;
+            document.getElementById("address").value = address;
+			document.getElementById("birthday").value = birthday;
+
+            document.getElementById("customer_edit_popup").style.display = "block";
+            document.getElementById("id").value = ID;
+        }
+
+        function closeEdit() {
+            document.getElementById("customer_edit_popup").style.display = "none";
+        }
+
+        function resetEdit() {
+            document.getElementById("first_name").value = first_name_mem;
+            document.getElementById("last_name").value = last_name_mem;
+            document.getElementById("address").value = address_mem;
+			document.getElementById("birthday").value = birthday_mem;
+        }
+	</script>
 
 	<div class=header>
 		<h1> Customers </h1>
 	</div>
-	
+
 	<div class="navBar">
-	<a href="customer_page.html"> Customers </a>
-	<a href="staff_page.html"> Staff </a>
+		<a href="customer_page.html"> Customers </a>
+		<a href="staff_page.html"> Staff </a>
 	</div>
 
+	<div id="customer_registration_div">
+		<label>Register New Customer</label><br><br>
+		<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name">
+		<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name">
+		<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)">
+		<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
+		<button onclick="register_customer()">Register</button><br><br><br><br>
+	</div>
+
+	<div id="customer_display_div">
+		<label>Customer Display</label><br><br>
+		<table border="1px solid black" id="display_table">
+            <thead>
+                <th>Customer ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Birthday</th>
+				<th>Address</th>
+                <th>Date Joined</th>
+            </thead>
+            <tbody id="display_tbody">
+            </tbody>
+        </table>
+	</div>
+
+	<div id="customer_edit_popup" class="popup">
+        <form onsubmit="return editCustomer()">
+            <h1 id="popup_header">Edit Staff </h1>
+            <label for="first_name">First Name</label>
+            <input id="first_name" type="text" name="first_name" required> <br><br>
+            <label for="last_name">Last Name</label>
+            <input id="last_name" type="text" name="last_name" required> <br><br>
+            <label for="birthday">Role</label>
+            <input id="birthday" type="text" name="birthday" required> <br><br>
+			<label for="address">Address</label>
+			<input id="address" type="text" name="address" required> <br><br>
+            <input type="hidden" id="id" name="id">
+
+            <button type="button" onclick="deleteCustomer()">Delete Customer</button> 
+            <button type="button" onclick="resetEdit()">Reset</button> <br><br>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="closeEdit()">Close</button>
+        </form>
+    </div>
+
+
 </body>
+
 </html>

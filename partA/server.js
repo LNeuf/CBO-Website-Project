@@ -29,34 +29,42 @@ app.get('/connect', (req, res) => {
 app.get('/isdbinit', (req, res) => {
 	var response = new Object();
 	var query_string = "SELECT count(*) FROM information_schema.tables WHERE (table_schema = 'cbo_db') AND (table_name ='staff');"
-	console.log(query_string);
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
 		}
 		var parsed_result = JSON.parse(JSON.stringify(result));
-		console.log(parsed_result);
-		console.log(parsed_result[0]['count(*)']);
 		if (parsed_result[0]["count(*)"] == 1) {
 			response.answer = "Yes";
 		}
 		else {
 			response.answer = "No";
 		}
-		res.send(response);
-		
+		res.send(JSON.stringify(response));
 	})
 });
 
 app.post('/registerstaff', (req, res) => {
-	var file_output = "INSERT INTO staff (firstname, lastname, role, joindate) VALUES ('" + req.body.fname + "', '" + req.body.lname + "', '" + req.body.role + "', '" + new Date() + "');";
-	console.log(file_output);
-	config.query(file_output, function (err, result) {
-		if (err) {
-			console.log(err);
-		}
-		res.send("Registration received!");
-	});
+	var response = new Object();
+	if (req.body.lname == "") {
+		response.answer = "Staff must have a last name!";
+		res.send(response);
+	}
+	else {
+		var file_output = "INSERT INTO staff (firstname, lastname, role, joindate) VALUES ('" + req.body.fname + "', '" + req.body.lname + "', '" + req.body.role + "', '" + new Date() + "');";
+		console.log(file_output);
+		config.query(file_output, function (err, result) {
+			if (err) {
+				console.log(err);
+				response.answer = "Registration Failure!";
+				res.send(JSON.stringify(response));
+			}
+			else {
+				response.answer = "Registration Success!";
+				res.send(JSON.stringify(response));
+			}
+		});
+	}
 });
 
 app.put('/editstaff', (req, res) => {
@@ -83,29 +91,37 @@ app.put('/editstaff', (req, res) => {
 		if (err) {
 			console.log(err);
 			response.answer = "Error updating staff";
+			res.send(JSON.stringify(response))
 		}
-		response.answer = "Successfully updated staff with ID: " + req.body.id;
-		res.send(JSON.stringify(response));
+		else {
+			response.answer = "Successfully updated staff with ID: " + req.body.id;
+			res.send(JSON.stringify(response));
+		}
 	})
 });
 
+/*  */
 app.delete('/deletestaff', (req, res) => {
 	var response = new Object();
 	var query_string = "DELETE FROM staff where ID=" + req.body.delete_id;
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
+			response.answer = "Failed to delete staff";
+			res.send(JSON.stringify(response));
 		}
-		response.answer = "Staff with ID: " + req.body.delete_id + " deleted";
-		res.send(JSON.stringify(response));
+		else {
+			response.answer = "Staff with ID: " + req.body.delete_id + " deleted";
+			res.send(JSON.stringify(response));
+		}
 	});
 });
 
-/* Sends the latest content */
+/* Sends the latest content to staff page*/
 app.get('/refreshstaff', (req, res) => {
 	var response = new Object();
 	var query_string = "SELECT * FROM staff;";
-	console.log(query_string);
+	// console.log(query_string);
 
 	config.query(query_string, function (err, result) {
 		if (err) {
@@ -123,6 +139,77 @@ app.get('/refreshstaff', (req, res) => {
 		}
 		
 		res.send(JSON.stringify(response));
+	});
+});
+
+// Customer calls
+
+/* Accepts customer registrations */
+app.post('/registercustomer', (req, res) => {
+	var response = new Object();
+	var query_string = "INSERT INTO customers (firstname, lastname, birthday, address, joindate) VALUES ('" + req.body.fname + "', '" + req.body.lname + "', '" + req.body.birthday + "', '" + req.body.address + "', '" + new Date() + "');";
+	if (req.body.lname == "") {
+		response.answer = "Customer must have a last name!";
+		res.send(response);
+	}
+	else if (req.body.birthday == "") {
+		response.answer = "Customer must have a birthday!";
+		res.send(response);
+	}
+	else {
+		config.query(query_string, function (err, result) {
+			if (err) {
+				console.log(err);
+				response.answer = "Registration Failure!";
+				res.send(JSON.stringify(response))
+			}
+			else {
+				response.answer = "Registration Success!"
+			
+				res.send(JSON.stringify(response));
+			}
+		});
+	}
+});
+
+/* Sends the latest content to customer page*/
+app.get('/refreshcustomers', (req, res) => {
+	var response = new Object();
+	var query_string = "SELECT * FROM customers;";
+	// console.log(query_string);
+
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "No customers!";
+			res.send(JSON.stringify(response));
+		}
+		var resultArray = JSON.parse(JSON.stringify(result));
+
+		if (resultArray == "") {
+			response.answer = "No customers!";
+		}
+		else {
+			response.answer = resultArray;
+		}
+
+		res.send(JSON.stringify(response));
+	});
+});
+
+app.delete('/deletecustomer', (req, res) => {
+	var response = new Object();
+	var query_string = "DELETE FROM customers where ID=" + req.body.delete_id;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "Failed to delete customer";
+			res.send(JSON.stringify(response));
+		}
+		else {
+			response.answer = "Customer with ID: " + req.body.delete_id + " deleted";
+			res.send(JSON.stringify(response));
+		}
 	});
 });
 
