@@ -8,6 +8,21 @@
 
 <body>
 
+<div class="header">
+	<h1> Welcome! </h1>
+</div>
+
+<div class="landingContainer">
+	<div class="split left">
+		<h1> Staff </h1>
+		<a href="staff_page.html" class="landingButton"> Click Here </a>
+	</div>
+	<div class="split right">
+		<h1> Customer </h1>
+		<a href="customer_page.html" class="landingButton"> Click Here </a>
+	</div>
+</div>
+
 <script>
 var left = document.querySelector(".left");
 var right = document.querySelector(".right");
@@ -28,23 +43,7 @@ right.addEventListener("mouseenter", () => {
 right.addEventListener("mouseleave", () => {
 	container.classList.remove("hover-right");
 });
-
 </script>
-
-<div class="header">
-	<h1> Welcome! </h1>
-</div>
-
-<div class="landingContainer">
-	<div class="split left">
-		<h1> Staff </h1>
-		<a href="staff_page.html" class="landingButton"> Click Here </a>
-	</div>
-	<div class="split right">
-		<h1> Customer </h1>
-		<a href="customer_page.html" class="landingButton"> Click Here </a>
-	</div>
-</div>
 
 </body>
 </html>
