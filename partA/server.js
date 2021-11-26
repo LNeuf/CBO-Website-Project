@@ -137,7 +137,7 @@ app.get('/refreshstaff', (req, res) => {
 		else {
 			response.answer = resultArray;
 		}
-		
+
 		res.send(JSON.stringify(response));
 	});
 });
@@ -165,7 +165,7 @@ app.post('/registercustomer', (req, res) => {
 			}
 			else {
 				response.answer = "Registration Success!"
-			
+
 				res.send(JSON.stringify(response));
 			}
 		});
@@ -211,6 +211,29 @@ app.delete('/deletecustomer', (req, res) => {
 			res.send(JSON.stringify(response));
 		}
 	});
+});
+
+app.put('/editcustomer', (req, res) => {
+	var response = new Object();
+	var set_string = "firstname = '" + req.body.first_name + "', lastname = '" + req.body.last_name + "', birthday = '" + req.body.birthday + "'"
+
+	if (req.body.address != "") {
+		set_string += ", address = '" + req.body.address + "'"
+	}
+
+	var query_string = "UPDATE customers SET " + set_string + " WHERE ID=" + req.body.id;
+	console.log(query_string);
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "Error updating customer";
+			res.send(JSON.stringify(response))
+		}
+		else {
+			response.answer = "Successfully updated customer with ID: " + req.body.id;
+			res.send(JSON.stringify(response));
+		}
+	})
 });
 
 

@@ -134,7 +134,7 @@
 			var http = new XMLHttpRequest();
 			var url = '/editcustomer';
 
-			var message = "first_name=" + document.getElementById("first_name").value + "&last_name=" + document.getElementById("last_name").value + "&role=" + document.getElementById("role").value + "&id=" + document.getElementById("id").value;
+			var message = "first_name=" + document.getElementById("first_name").value + "&last_name=" + document.getElementById("last_name").value + "&birthday=" + document.getElementById("birthday").value + "&address=" + document.getElementById("address").value + "&id=" + document.getElementById("id").value;
 
 			http.open('PUT', url, true);
 
@@ -156,37 +156,37 @@
 		};
 
 		// Variables to reset the edit data
-        var first_name_mem;
-        var last_name_mem;
-        var birthday_mem;
+		var first_name_mem;
+		var last_name_mem;
+		var birthday_mem;
 		var address_mem;
 
-        function openEdit(ID, first_name, last_name, birthday, address) {
-            first_name_mem = first_name;
-            last_name_mem = last_name;
-            birthday_mem = birthday;
+		function openEdit(ID, first_name, last_name, birthday, address) {
+			first_name_mem = first_name;
+			last_name_mem = last_name;
+			birthday_mem = birthday;
 			address_mem = address;
 
-            document.getElementById("popup_header").innerText = "Edit Customer " + ID;
-            document.getElementById("first_name").value = first_name;
-            document.getElementById("last_name").value = last_name;
-            document.getElementById("address").value = address;
+			document.getElementById("popup_header").innerText = "Edit Customer " + ID;
+			document.getElementById("first_name").value = first_name;
+			document.getElementById("last_name").value = last_name;
+			document.getElementById("address").value = address;
 			document.getElementById("birthday").value = birthday;
 
-            document.getElementById("customer_edit_popup").style.display = "block";
-            document.getElementById("id").value = ID;
-        }
+			document.getElementById("customer_edit_popup").style.display = "block";
+			document.getElementById("id").value = ID;
+		}
 
-        function closeEdit() {
-            document.getElementById("customer_edit_popup").style.display = "none";
-        }
+		function closeEdit() {
+			document.getElementById("customer_edit_popup").style.display = "none";
+		}
 
-        function resetEdit() {
-            document.getElementById("first_name").value = first_name_mem;
-            document.getElementById("last_name").value = last_name_mem;
-            document.getElementById("address").value = address_mem;
+		function resetEdit() {
+			document.getElementById("first_name").value = first_name_mem;
+			document.getElementById("last_name").value = last_name_mem;
+			document.getElementById("address").value = address_mem;
 			document.getElementById("birthday").value = birthday_mem;
-        }
+		}
 	</script>
 
 	<div class=header>
@@ -199,49 +199,51 @@
 	</div>
 
 	<div id="customer_registration_div">
-		<label>Register New Customer</label><br><br>
-		<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name">
-		<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name">
-		<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)">
-		<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
-		<button onclick="register_customer()">Register</button><br><br><br><br>
+		<form onsubmit="return register_customer()">
+			<label>Register New Customer</label><br><br>
+			<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name" required>
+			<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name" required>
+			<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)" required>
+			<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
+			<button type="submit">Register</button><br><br><br><br>
+		</form>
 	</div>
 
 	<div id="customer_display_div">
 		<label>Customer Display</label><br><br>
 		<table border="1px solid black" id="display_table">
-            <thead>
-                <th>Customer ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Birthday</th>
+			<thead>
+				<th>Customer ID</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Birthday</th>
 				<th>Address</th>
-                <th>Date Joined</th>
-            </thead>
-            <tbody id="display_tbody">
-            </tbody>
-        </table>
+				<th>Date Joined</th>
+			</thead>
+			<tbody id="display_tbody">
+			</tbody>
+		</table>
 	</div>
 
 	<div id="customer_edit_popup" class="popup">
-        <form onsubmit="return editCustomer()">
-            <h1 id="popup_header">Edit Staff </h1>
-            <label for="first_name">First Name</label>
-            <input id="first_name" type="text" name="first_name" required> <br><br>
-            <label for="last_name">Last Name</label>
-            <input id="last_name" type="text" name="last_name" required> <br><br>
-            <label for="birthday">Role</label>
-            <input id="birthday" type="text" name="birthday" required> <br><br>
+		<form onsubmit="return editCustomer()">
+			<h1 id="popup_header">Edit Staff </h1>
+			<label for="first_name">First Name</label>
+			<input id="first_name" type="text" name="first_name" required> <br><br>
+			<label for="last_name">Last Name</label>
+			<input id="last_name" type="text" name="last_name" required> <br><br>
+			<label for="birthday">Birthday</label>
+			<input id="birthday" type="text" name="birthday" required> <br><br>
 			<label for="address">Address</label>
-			<input id="address" type="text" name="address" required> <br><br>
-            <input type="hidden" id="id" name="id">
+			<input id="address" type="text" name="address"> <br><br>
+			<input type="hidden" id="id" name="id">
 
-            <button type="button" onclick="deleteCustomer()">Delete Customer</button> 
-            <button type="button" onclick="resetEdit()">Reset</button> <br><br>
-            <button type="submit">Submit</button>
-            <button type="button" onclick="closeEdit()">Close</button>
-        </form>
-    </div>
+			<button type="button" onclick="deleteCustomer()">Delete Customer</button>
+			<button type="button" onclick="resetEdit()">Reset</button> <br><br>
+			<button type="submit">Submit</button>
+			<button type="button" onclick="closeEdit()">Close</button>
+		</form>
+	</div>
 
 
 </body>
