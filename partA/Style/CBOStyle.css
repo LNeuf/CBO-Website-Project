@@ -8,10 +8,10 @@
 
 .header
 {
-	padding: 20px;
+	padding: 10px;
 	text-align: left;
-	background: red;
-	color: gold;
+	background: DarkSlateBlue;
+	color: white;
 }
 
 .header h1
@@ -29,13 +29,18 @@ html, body
 	overflow-x: hidden;
 }
 
+label
+{
+	font-size: 30px;
+}
+	
 /*Landing page*/
 .split h1 {
 	font-size: 45px;
-	color: gold;
+	color: white;
 	position: absolute;
 	left: 50%;
-	top: 20%;
+	top: 30%;
 	transform: translateX(-50%);
 	white-space: nowrap;
 }
@@ -45,13 +50,13 @@ html, body
 	display: block;
 	position: absolute;
 	left: 50%;
-	top: 40%;
+	top: 70%;
 	width: 100px;
 	height: 20px;
 	padding-top: 5px;
 	text-align: center;
-	color: gold;
-	border: gold solid 5px;
+	color: white;
+	border: white solid 5px;
 	border-radius: 10px;
 	text-decoration: none;
 	transform: translateX(-50%);
@@ -75,13 +80,13 @@ html, body
 .split.left
 {
 	left: 0;
-	background: blue;
+	background: url("Photos/CBOstaff.jpg") center center no-repeat;
 }
 
 .split.right
 {
 	right: 0;
-	background: grey;
+	background: url("Photos/CBOcustomer.jpg") center center no-repeat;
 }
 
 .split.left, .split.right
@@ -112,7 +117,7 @@ html, body
 .navBar
 {
 	overflow: hidden;
-	background: gold;
+	background: DarkTurquoise;
 	text-align: center;
 }
 
@@ -125,7 +130,7 @@ html, body
 {
 	float: center;
 	display: inline-block;
-	color: red;
+	color: white;
 	font-size: 20px;
 	text-align: center;
 	padding: 14px 20px;
@@ -134,8 +139,8 @@ html, body
 
 .navBar a:hover
 {
-	background-color: red;
-	color: gold;
+	background-color: DarkSlateBlue;
+	color: DarkTurquoise;
 }
 
 .popup
@@ -152,3 +157,41 @@ html, body
     background-color: darkgrey;
     z-index: 9;
 }
+
+/*Inputs*/
+button
+{
+	border-radius: 10px;
+	font-size: 20px;
+	background-color: DarkTurquoise;
+	border: none;
+	color: white;
+	padding: 15px 12px;
+}
+
+input[type=text]
+{
+	padding: 15px 12px;
+	border-radius: 10px;
+}	
+
+/*Tables*/
+.CBOTable
+{
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 20px;
+}
+
+.CBOTable thead tr
+{
+	background-color: DarkSlateBlue;
+	color: white;
+	text-align: left;
+}
+
+.CBOTable th, .CBOTable td
+{
+	padding: 12px 15px; 
+}
+
