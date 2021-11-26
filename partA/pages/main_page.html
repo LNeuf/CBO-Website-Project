@@ -9,28 +9,42 @@
 <body>
 
 <script>
-    function change_to_staff_page() {
-        window.location.href = "staff_page.html"
-    }
+var left = document.querySelector(".left");
+var right = document.querySelector(".right");
+var container = document.querySelector(".landingContainer");
+ 
+left.addEventListener("mouseenter", () => {
+	container.classList.add("hover-left");
+});
 
-    function change_to_customer_page() {
-        window.location.href = "customer_page.html"
-    }
+left.addEventListener("mouseleave", () => {
+	container.classList.remove("hover-left");
+});
+
+right.addEventListener("mouseenter", () => {
+	container.classList.add("hover-right");
+});
+
+right.addEventListener("mouseleave", () => {
+	container.classList.remove("hover-right");
+});
+
 </script>
-
 
 <div class="header">
 	<h1> Welcome! </h1>
 </div>
 
-<div class="navBar">
-	<a href="customer_page.html"> Customers </a>
-	<a href="staff_page.html"> Staff </a>
+<div class="landingContainer">
+	<div class="split left">
+		<h1> Staff </h1>
+		<a href="staff_page.html" class="landingButton"> Click Here </a>
+	</div>
+	<div class="split right">
+		<h1> Customer </h1>
+		<a href="customer_page.html" class="landingButton"> Click Here </a>
+	</div>
 </div>
-
-
-        <input type="button" value="Staff View" onclick="change_to_staff_page()"/>
-        <input type="button" value="Customer View" onclick="change_to_customer_page()"/>
 
 </body>
 </html>
