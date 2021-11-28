@@ -1,0 +1,10 @@
+version: '3'
+services:
+
+  node1:
+    build: ./
+    container_name: s1
+    ports:
+      - "80:8080"
+    volumes:
+      - ./:/usr/src/app
