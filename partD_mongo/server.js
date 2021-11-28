@@ -196,7 +196,7 @@ app.get('/refreshcustomers', (req, res) => {
 });
 
 /* Handles request for deleting a staff member */
-app.delete('/deletestaff', (req, res) => {
+app.delete('/deletecustomer', (req, res) => {
 	var response = new Object();
 	customerModel.deleteOne({id: req.body.delete_id})
 	.then((result) => {
@@ -211,6 +211,7 @@ app.delete('/deletestaff', (req, res) => {
 });
 
 app.put('/editcustomer', (req, res) => {
+	var response = new Object();
 	var customer = {
 		firstname: req.body.first_name,
 		lastname: req.body.last_name,
