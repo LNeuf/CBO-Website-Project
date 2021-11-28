@@ -138,15 +138,12 @@ app.get('/refreshstaff', (req, res) => {
 	})
 });
 
-// Customer calls
-var customerID = 1;
-
 /* Accepts customer registrations */
 app.post('/registercustomer', (req, res) => {
 	var response = new Object();
 	idModel.find()
 	.then((result) => {
-		var customerID = result[0].staffID;
+		var customerID = result[0].customerID;
 		
 		// Register new staff with ID
 		var customer = new customerModel({
@@ -171,7 +168,7 @@ app.post('/registercustomer', (req, res) => {
 		// Increment ID in database
 		idModel.findOneAndUpdate({customerID: result[0].customerID}, {$inc : {'customerID':1}})
 		.then((result) => {
-			console.log("Updated staff ID");
+			console.log("Updated customer ID");
 		})
 		.catch((err) => {
 			console.log(err);
@@ -183,69 +180,55 @@ app.post('/registercustomer', (req, res) => {
 	
 });
 
-// /* Sends the latest content to customer page*/
-// app.get('/refreshcustomers', (req, res) => {
-// 	var response = new Object();
-// 	var query_string = "SELECT * FROM customers;";
-// 	// console.log(query_string);
+/* Sends the latest content to customer page*/
+app.get('/refreshcustomers', (req, res) => {
+	var response = new Object();
+	customerModel.find()
+	.then((result) => {
+		response.answer = result;
+		res.send(response);
+	})
+	.catch((err) => {
+		console.log(err);
+		response.answer = "Refresh Failed";
+		res.send(response);
+	})
+});
 
-// 	config.query(query_string, function (err, result) {
-// 		if (err) {
-// 			console.log(err);
-// 			response.answer = "No customers!";
-// 			res.send(JSON.stringify(response));
-// 		}
-// 		var resultArray = JSON.parse(JSON.stringify(result));
+/* Handles request for deleting a staff member */
+app.delete('/deletestaff', (req, res) => {
+	var response = new Object();
+	customerModel.deleteOne({id: req.body.delete_id})
+	.then((result) => {
+		response.answer = "Deleted customer with ID: " + req.body.delete_id;
+		res.send(response);
+	})
+	.catch((err) => {
+		console.log(err);
+		response.answer = "Error deleting customer";
+		res.send(response);
+	})
+});
 
-// 		if (resultArray == "") {
-// 			response.answer = "No customers!";
-// 		}
-// 		else {
-// 			response.answer = resultArray;
-// 		}
+app.put('/editcustomer', (req, res) => {
+	var customer = {
+		firstname: req.body.first_name,
+		lastname: req.body.last_name,
+		birthday: req.body.birthday,
+		address: req.body.address
+	};
 
-// 		res.send(JSON.stringify(response));
-// 	});
-// });
-
-// app.delete('/deletecustomer', (req, res) => {
-// 	var response = new Object();
-// 	var query_string = "DELETE FROM customers where ID=" + req.body.delete_id;
-// 	config.query(query_string, function (err, result) {
-// 		if (err) {
-// 			console.log(err);
-// 			response.answer = "Failed to delete customer";
-// 			res.send(JSON.stringify(response));
-// 		}
-// 		else {
-// 			response.answer = "Customer with ID: " + req.body.delete_id + " deleted";
-// 			res.send(JSON.stringify(response));
-// 		}
-// 	});
-// });
-
-// app.put('/editcustomer', (req, res) => {
-// 	var response = new Object();
-// 	var set_string = "firstname = '" + req.body.first_name + "', lastname = '" + req.body.last_name + "', birthday = '" + req.body.birthday + "'"
-
-// 	if (req.body.address != "") {
-// 		set_string += ", address = '" + req.body.address + "'"
-// 	}
-
-// 	var query_string = "UPDATE customers SET " + set_string + " WHERE ID=" + req.body.id;
-// 	console.log(query_string);
-// 	config.query(query_string, function (err, result) {
-// 		if (err) {
-// 			console.log(err);
-// 			response.answer = "Error updating customer";
-// 			res.send(JSON.stringify(response))
-// 		}
-// 		else {
-// 			response.answer = "Successfully updated customer with ID: " + req.body.id;
-// 			res.send(JSON.stringify(response));
-// 		}
-// 	})
-// });
+	staffModel.findOneAndUpdate({id: req.body.id}, customer)
+	.then((result) => {
+		response.answer = "Updated info for customer with ID: " + req.body.id;
+		res.send(response);
+	})
+	.catch((err) => {
+		console.log(err);
+		response.answer = "Error updating customer";
+		res.send(response);
+	})
+});
 
 
 app.use(express.static(__dirname + '/Style'));
