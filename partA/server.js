@@ -184,16 +184,18 @@ app.get('/refreshcustomers', (req, res) => {
 			response.answer = "No customers!";
 			res.send(JSON.stringify(response));
 		}
-		var resultArray = JSON.parse(JSON.stringify(result));
-
-		if (resultArray == "") {
-			response.answer = "No customers!";
-		}
 		else {
-			response.answer = resultArray;
-		}
+			var resultArray = JSON.parse(JSON.stringify(result));
 
-		res.send(JSON.stringify(response));
+			if (resultArray == "") {
+				response.answer = "No customers!";
+			}
+			else {
+				response.answer = resultArray;
+			}
+
+			res.send(JSON.stringify(response));
+		}
 	});
 });
 
@@ -235,6 +237,63 @@ app.put('/editcustomer', (req, res) => {
 		}
 	})
 });
+
+app.post('/newreport', (req, res) => {
+	var response = new Object();
+	var query_string = `INSERT INTO reports (ID, report, date) VALUES (${req.body.id}, '${encodeURI(req.body.report)}', '${new Date()}');`;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "Error submitting report";
+			res.send(JSON.stringify(response))
+		}
+		else {
+			response.answer = `Report for customer ID: ${req.body.id} success`;
+
+			res.send(JSON.stringify(response));
+		}
+	})
+});
+
+app.post('/getreports', (req, res) => {
+	var response = new Object();
+	var query_string = `SELECT * FROM reports WHERE id=${req.body.customer_id};`;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "Error getting reports";
+			res.send(JSON.stringify(response));
+		}
+		else {
+			var resultArray = JSON.parse(JSON.stringify(result));
+
+			if (resultArray == "") {
+				response.answer = "No reports!";
+			}
+			else {
+				response.answer = resultArray;
+				console.log(resultArray);
+			}
+			res.send(JSON.stringify(response));
+		}
+	});
+});
+
+app.delete('/deletereport', (req, res) => {
+	var response = new Object();
+	var query_string = "DELETE FROM reports where report_id=" + req.body.report_id;
+	config.query(query_string, function (err, result) {
+		if (err) {
+			console.log(err);
+			response.answer = "Failed to delete report";
+			res.send(JSON.stringify(response));
+		}
+		else {
+			response.answer = "Report with ID: " + req.body.report_id + " deleted";
+			res.send(JSON.stringify(response));
+		}
+	});
+})
 
 
 app.use(express.static(__dirname + '/Style'));

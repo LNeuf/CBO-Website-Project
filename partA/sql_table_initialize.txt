@@ -18,3 +18,11 @@ address varchar(255),
 joindate varchar(255),
 PRIMARY KEY (ID)
 );
+
+CREATE TABLE reports (
+ID int,
+report_id int NOT NULL AUTO_INCREMENT,
+report varchar(1000) NOT NULL,
+date varchar(255) NOT NULL,
+PRIMARY KEY (report_id)
+);
