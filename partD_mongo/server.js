@@ -39,41 +39,62 @@ const customerSchema = new mongoose.Schema({
 	joindate: String
 })
 
+const idSchema = new mongoose.Schema({
+	staffID: Number,
+	customerID: Number
+});
+
 const staffModel = mongoose.model("staff", staffSchema);
 const customerModel = mongoose.model("customer", customerSchema);
-
-var staffID = 1;
+const idModel = mongoose.model("id", idSchema);
 
 app.post('/registerstaff', (req, res) => {
 	var response = new Object();
-	var staff = new staffModel({
-		id: staffID,
-		firstname: req.body.fname,
-		lastname: req.body.lname,
-		role: req.body.role,
-		joindate: new Date()
-	});
-
-	staff.save()
+	
+	idModel.find()
 	.then((result) => {
-		response.answer = result;
-		staffID += 1;
-		res.send(JSON.stringify(response));
+		var staffID = result[0].staffID;
+		
+		// Register new staff with ID
+		var staff = new staffModel({
+			id: staffID,
+			firstname: req.body.fname,
+			lastname: req.body.lname,
+			role: req.body.role,
+			joindate: new Date()
+		});
+	
+		staff.save()
+		.then((result) => {
+			response.answer = result;
+			res.send(JSON.stringify(response));
+		})
+		.catch((err) => {
+			console.log(err);
+			response.answer = "Registration Failure"
+		});
+
+		// Increment ID in database
+		idModel.findOneAndUpdate({staffID: result[0].staffID}, {$inc : {'staffID':1}})
+		.then((result) => {
+			console.log("Updated staff ID");
+		})
+		.catch((err) => {
+			console.log(err);
+		})
 	})
 	.catch((err) => {
 		console.log(err);
-		response.answer = "Registration Failure"
-	});
+	})
 });
 
 app.put('/editstaff', (req, res) => {
 	var response = new Object();
-	var staff = new staffModel({
-		id: req.body.id,
+	var staff = {
 		firstname: req.body.first_name,
 		lastname: req.body.last_name,
-		role: req.body.role,
-	});
+		role: req.body.role
+	};
 
 	staffModel.findOneAndUpdate({id: req.body.id}, staff)
 	.then((result) => {
@@ -123,25 +144,43 @@ var customerID = 1;
 /* Accepts customer registrations */
 app.post('/registercustomer', (req, res) => {
 	var response = new Object();
-	var customer = new customerModel({
-		id: customerID,
-		firstname: req.body.fname,
-		lastname: req.body.lname,
-		birthday: req.body.birthday,
-		address: req.body.address,
-		joindate: new Date()
-	});
-
-	customer.save()
+	idModel.find()
 	.then((result) => {
-		response.answer = result;
-		customerID += 1;
-		res.send(JSON.stringify(response));
+		var customerID = result[0].staffID;
+		
+		// Register new staff with ID
+		var customer = new customerModel({
+			id: customerID,
+			firstname: req.body.fname,
+			lastname: req.body.lname,
+			birthday: req.body.birthday,
+			address: req.body.address,
+			joindate: new Date()
+		});
+	
+		customer.save()
+		.then((result) => {
+			response.answer = result;
+			res.send(JSON.stringify(response));
+		})
+		.catch((err) => {
+			console.log(err);
+			response.answer = "Registration Failure"
+		});
+
+		// Increment ID in database
+		idModel.findOneAndUpdate({customerID: result[0].customerID}, {$inc : {'customerID':1}})
+		.then((result) => {
+			console.log("Updated staff ID");
+		})
+		.catch((err) => {
+			console.log(err);
+		})
 	})
 	.catch((err) => {
 		console.log(err);
-		response.answer = "Registration Failure"
-	});
+	})
+	
 });
 
 // /* Sends the latest content to customer page*/
