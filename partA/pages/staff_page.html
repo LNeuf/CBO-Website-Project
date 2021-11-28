@@ -190,50 +190,53 @@
 		<li><a href="staff_page.html"> Staff </a></li>
 		<li><a href="customer_page.html"> Customers </a></li>	
 	</div>
+	
+	<div class="container">
+		<div id="staff_registration_div">
+			<form onsubmit="return register_staff()">
+				<label>Register New Staff</label><br><br>
+				<input id="staff_fname" type="text" name="staff_fname" placeholder="First Name" required>
+				<input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name" required>
+				<input id="staff_role" type="text" name="staff_role" placeholder="Role" required><br><br>
+				<button type="submit">Register</button><br><br><br><br>
+			</form>
+		</div>
 
-    <div id="staff_registration_div">
-        <form onsubmit="return register_staff()">
-            <label>Register New Staff</label><br><br>
-            <input id="staff_fname" type="text" name="staff_fname" placeholder="First Name" required>
-            <input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name" required>
-            <input id="staff_role" type="text" name="staff_role" placeholder="Role" required><br><br>
-            <button type="submit">Register</button><br><br><br><br>
-        </form>
-    </div>
+	
+		<div id="staff_display_div">
+			<label for="staff_display">Staff Display</label><br><br>
+			<!-- <button onclick="refresh_staff_list()">Refresh Staff List</button><br><br> -->
+			<table border="1px solid black" id="display_table" class="CBOTable">
+				<thead>
+					<th id="numCell">Staff ID</th>
+					<th id="infoCell">First Name</th>
+					<th id="infoCell">Last Name</th>
+					<th id="infoCell">Role</th>
+					<th id="dateCell">Date Joined</th>
+				</thead>
+				<tbody id="display_tbody">
+				</tbody>
+			</table>
+		</div>
 
-    <div id="staff_display_div">
-        <label for="staff_display">Staff Display</label><br><br>
-        <!-- <button onclick="refresh_staff_list()">Refresh Staff List</button><br><br> -->
-        <table border="1px solid black" id="display_table" class="CBOTable">
-            <thead>
-                <th>Staff ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Role</th>
-                <th>Date Joined</th>
-            </thead>
-            <tbody id="display_tbody">
-            </tbody>
-        </table>
-    </div>
+		<div id="staff_edit_popup" class="popup">
+			<form onsubmit="return editStaff()">
+				<h1 id="popup_header">Edit Staff </h1>
+				<label for="first_name">First Name</label>
+				<input id="first_name" type="text" name="first_name" required> <br><br>
+				<label for="last_name">Last Name</label>
+				<input id="last_name" type="text" name="last_name" required> <br><br>
+				<label for="role">Role</label>
+				<input id="role" type="text" name="role" required> <br><br>
+				<input type="hidden" id="id" name="id">
 
-    <div id="staff_edit_popup" class="popup">
-        <form onsubmit="return editStaff()">
-            <h1 id="popup_header">Edit Staff </h1>
-            <label for="first_name">First Name</label>
-            <input id="first_name" type="text" name="first_name" required> <br><br>
-            <label for="last_name">Last Name</label>
-            <input id="last_name" type="text" name="last_name" required> <br><br>
-            <label for="role">Role</label>
-            <input id="role" type="text" name="role" required> <br><br>
-            <input type="hidden" id="id" name="id">
-
-            <button type="button" onclick="deleteStaff()">Delete Staff Member</button>
-            <button type="button" onclick="resetEdit()">Reset</button> <br><br>
-            <button type="submit">Submit</button>
-            <button type="button" onclick="closeEdit()">Close</button>
-        </form>
-    </div>
+				<button type="button" onclick="deleteStaff()">Delete Staff Member</button>
+				<button type="button" onclick="resetEdit()">Reset</button> <br><br>
+				<button type="submit">Submit</button>
+				<button type="button" onclick="closeEdit()">Close</button>
+			</form>
+		</div>
+	</div>
 </body>
 
 </html>
