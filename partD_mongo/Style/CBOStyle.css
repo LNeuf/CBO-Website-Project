@@ -34,6 +34,11 @@ label
 	font-size: 30px;
 }
 	
+.container
+{
+	padding: 15px;
+}	
+	
 /*Landing page*/
 .split h1 {
 	font-size: 45px;
@@ -51,15 +56,23 @@ label
 	position: absolute;
 	left: 50%;
 	top: 70%;
-	width: 100px;
-	height: 20px;
+	width: 200px;
+	height: 30px;
 	padding-top: 5px;
 	text-align: center;
 	color: white;
+	font-size: 25px;
+	font-weight: bold;
 	border: white solid 5px;
 	border-radius: 10px;
 	text-decoration: none;
 	transform: translateX(-50%);
+}
+
+.landingButton:hover
+{
+	
+	border-color: DarkSlateBlue;
 }
 
 .landingContainer
@@ -169,11 +182,22 @@ button
 	padding: 15px 12px;
 }
 
+button:hover
+{
+	background-color: DarkSlateBlue;
+}
+
 input[type=text]
 {
 	padding: 15px 12px;
 	border-radius: 10px;
+	border-color:DarkTurquoise;
 }	
+
+input[type=text]:focus
+{
+	border-color:DarkSlateBlue;
+}
 
 /*Tables*/
 .CBOTable
@@ -195,3 +219,17 @@ input[type=text]
 	padding: 12px 15px; 
 }
 
+#numCell
+{
+	width: 75px;
+}
+
+#infoCell
+{
+	width: 100px;
+}
+
+#dateCell
+{
+	width: 300px;
+}
