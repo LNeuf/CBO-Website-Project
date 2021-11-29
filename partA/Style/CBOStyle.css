@@ -188,6 +188,7 @@ h2
     border: 3px solid cornflowerblue;
     background-color: darkgrey;
     z-index: 9;
+	overflow: hidden;
 }
 
 /*Inputs*/
@@ -237,6 +238,21 @@ input[type=text]:focus
 .CBOTable th, .CBOTable td
 {
 	padding: 12px 15px; 
+}
+
+#report_id
+{
+	width: 10%;
+}
+
+#reportCell
+{
+	width: 60%;
+}
+
+#repDateCell
+{
+	width: 20%;
 }
 
 #numCell
