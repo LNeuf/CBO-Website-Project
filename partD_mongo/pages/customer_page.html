@@ -31,7 +31,6 @@
 					}
 				}
 			};
-
 			http.send(message);
 		};
 
@@ -65,18 +64,18 @@
 								var editCell = row.insertCell();
 								var reportCell = row.insertCell();
 
-								idcell.innerHTML = response.answer[i].ID;
+								idcell.innerHTML = response.answer[i].id;
 								fnameCell.innerHTML = response.answer[i].firstname;
 								lnameCell.innerHTML = response.answer[i].lastname;
 								birthdayCell.innerHTML = response.answer[i].birthday;
 								addressCell.innerHTML = response.answer[i].address;
 								dateCell.innerHTML = response.answer[i].joindate;
 
-								var button_onclick = response.answer[i].ID + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].birthday + "', '" + response.answer[i].address + "'";
-								editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
+								var button_onclick = response.answer[i].id + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].birthday + "', '" + response.answer[i].address + "'";
+								editCell.innerHTML = '<button id="' + response.answer[i].id + '_button" name="' + response.answer[i].id + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
 
-								var report_onclick = `${response.answer[i].ID}`;
-								reportCell.innerHTML = `<button id="${response.answer[i].ID}_report_button" onclick="openReports(${report_onclick})">Reports</button>`;
+								var report_onclick = `${response.answer[i].id}`;
+								reportCell.innerHTML = `<button id="${response.answer[i].id}_report_button" onclick="openReports(${report_onclick})">Reports</button>`;
 							}
 						}
 					}
