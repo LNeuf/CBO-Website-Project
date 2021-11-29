@@ -8,30 +8,7 @@
 
 <body>
     <script>
-        var check_db = setInterval(is_db_initialized, 1000);
-
-        function is_db_initialized() {
-            var http = new XMLHttpRequest();
-            var url = '/isdbinit';
-
-            http.open('GET', url, true);
-
-            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-            http.onreadystatechange = function () {
-                if (http.readyState == 4) {
-                    if (http.status == 200) {
-                        var response = JSON.parse(http.responseText);
-                        if (response.answer == "Yes") {
-                            setInterval(refresh_staff_list, 1000);
-                            clearInterval(check_db);
-                        }
-                    }
-                }
-
-            };
-            http.send();
-        };
+        setInterval(refresh_staff_list, 1000);
 
         function register_staff() {
             var http = new XMLHttpRequest();
@@ -86,14 +63,14 @@
                                 var dateCell = row.insertCell();
                                 var editCell = row.insertCell();
 
-                                idcell.innerHTML = response.answer[i].ID;
+                                idcell.innerHTML = response.answer[i].id;
                                 fnameCell.innerHTML = response.answer[i].firstname;
                                 lnameCell.innerHTML = response.answer[i].lastname;
                                 roleCell.innerHTML = response.answer[i].role;
                                 dateCell.innerHTML = response.answer[i].joindate;
 
-                                var button_onclick = response.answer[i].ID + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].role + "'";
-                                editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
+                                var button_onclick = response.answer[i].id + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].role + "'";
+                                editCell.innerHTML = '<button id="' + response.answer[i].id + '_button" name="' + response.answer[i].id + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
                             }
                         }
                     }
@@ -183,7 +160,7 @@
     </script>
 
     <div class=header>
-        <h1> Staff </h1>
+        <a href="main_page.html"> CBO YXE - STAFF </a>
     </div>
 
     <div class="navBar">
@@ -191,52 +168,50 @@
 		<li><a href="customer_page.html"> Customers </a></li>	
 	</div>
 	
-	<div class="container">
-		<div id="staff_registration_div">
-			<form onsubmit="return register_staff()">
-				<label>Register New Staff</label><br><br>
-				<input id="staff_fname" type="text" name="staff_fname" placeholder="First Name" required>
-				<input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name" required>
-				<input id="staff_role" type="text" name="staff_role" placeholder="Role" required><br><br>
-				<button type="submit">Register</button><br><br><br><br>
-			</form>
-		</div>
-
+	<h2>Register New Staff</h2>
 	
-		<div id="staff_display_div">
-			<label for="staff_display">Staff Display</label><br><br>
-			<!-- <button onclick="refresh_staff_list()">Refresh Staff List</button><br><br> -->
-			<table border="1px solid black" id="display_table" class="CBOTable">
-				<thead>
-					<th id="numCell">Staff ID</th>
-					<th id="infoCell">First Name</th>
-					<th id="infoCell">Last Name</th>
-					<th id="infoCell">Role</th>
-					<th id="dateCell">Date Joined</th>
-				</thead>
-				<tbody id="display_tbody">
-				</tbody>
-			</table>
-		</div>
-
-		<div id="staff_edit_popup" class="popup">
-			<form onsubmit="return editStaff()">
-				<h1 id="popup_header">Edit Staff </h1>
-				<label for="first_name">First Name</label>
-				<input id="first_name" type="text" name="first_name" required> <br><br>
-				<label for="last_name">Last Name</label>
-				<input id="last_name" type="text" name="last_name" required> <br><br>
-				<label for="role">Role</label>
-				<input id="role" type="text" name="role" required> <br><br>
-				<input type="hidden" id="id" name="id">
-
-				<button type="button" onclick="deleteStaff()">Delete Staff Member</button>
-				<button type="button" onclick="resetEdit()">Reset</button> <br><br>
-				<button type="submit">Submit</button>
-				<button type="button" onclick="closeEdit()">Close</button>
-			</form>
-		</div>
+	<div id="staff_registration_div" class="container">
+		<form onsubmit="return register_staff()">
+			<input id="staff_fname" type="text" name="staff_fname" placeholder="First Name" required>
+			<input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name" required>
+			<input id="staff_role" type="text" name="staff_role" placeholder="Role" required><br><br>
+			<button type="submit">Register</button><br><br>
+		</form>
 	</div>
-</body>
 
+	<h2>Staff Display</h2>
+
+	<div id="staff_display_div" class="container">
+		<table border="1px solid black" id="display_table" class="CBOTable">
+			<thead>
+				<th id="numCell">Staff ID</th>
+				<th id="infoCell">First Name</th>
+				<th id="infoCell">Last Name</th>
+				<th id="infoCell">Role</th>
+				<th id="dateCell">Date Joined</th>
+			</thead>
+			<tbody id="display_tbody">
+			</tbody>
+		</table>
+	</div>
+
+	<div id="staff_edit_popup" class="popup">
+		<form onsubmit="return editStaff()">
+			<h1 id="popup_header">Edit Staff </h1>
+			<label for="first_name">First Name</label>
+			<input id="first_name" type="text" name="first_name" required> <br><br>
+			<label for="last_name">Last Name</label>
+			<input id="last_name" type="text" name="last_name" required> <br><br>
+			<label for="role">Role</label>
+			<input id="role" type="text" name="role" required> <br><br>
+			<input type="hidden" id="id" name="id">
+
+			<button type="button" onclick="deleteStaff()">Delete Staff Member</button>
+			<button type="button" onclick="resetEdit()">Reset</button> <br><br>
+			<button type="submit">Submit</button>
+			<button type="button" onclick="closeEdit()">Close</button>
+		</form>
+	</div>
+	
+</body>
 </html>

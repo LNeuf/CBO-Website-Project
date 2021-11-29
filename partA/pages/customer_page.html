@@ -9,30 +9,7 @@
 
 <body>
 	<script>
-		var check_db = setInterval(is_db_initialized, 1000);
-
-		function is_db_initialized() {
-			var http = new XMLHttpRequest();
-			var url = '/isdbinit';
-
-			http.open('GET', url, true);
-
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						if (response.answer == "Yes") {
-							setInterval(refresh_customer_list, 1000);
-							clearInterval(check_db);
-						}
-					}
-				}
-			};
-
-			http.send("page_type=staff");
-		};
+		setInterval(refresh_customer_list, 1000);
 
 		function register_customer() {
 			var http = new XMLHttpRequest();
@@ -88,7 +65,7 @@
 								var editCell = row.insertCell();
 								var reportCell = row.insertCell();
 
-								idcell.innerHTML = response.answer[i].ID;
+								idcell.innerHTML = response.answer[i].id;
 								fnameCell.innerHTML = response.answer[i].firstname;
 								lnameCell.innerHTML = response.answer[i].lastname;
 								birthdayCell.innerHTML = response.answer[i].birthday;
@@ -315,7 +292,7 @@
 	</script>
 
 	<div class=header>
-		<h1> Customers </h1>
+		<a href="main_page.html"> CBO YXE - CUSTOMERS</a>
 	</div>
 
 	<div class="navBar">
@@ -323,21 +300,22 @@
 		<li><a href="customer_page.html"> Customers </a></li>
 	</div>
 
-	<div class="container">
-		<div id="customer_registration_div">
+		<h2>Register New Customer</h2>
+	
+		<div id="customer_registration_div" class="container">
 			<form onsubmit="return register_customer()">
-				<label>Register New Customer</label><br><br>
 				<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name" required>
 				<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name" required>
 				<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)"
 					required>
 				<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
-				<button type="submit">Register</button><br><br><br><br>
+				<button type="submit">Register</button><br><br>
 			</form>
 		</div>
-
-		<div id="customer_display_div">
-			<label>Customer Display</label><br><br>
+		
+		<h2>Customer Display</h2>
+		
+		<div id="customer_display_div" class="container">
 			<table border="1px solid black" id="display_table" class="CBOTable">
 				<thead>
 					<th id="numCell">Customer ID</th>

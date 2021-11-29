@@ -167,7 +167,7 @@
 	</script>
 
 	<div class=header>
-		<h1> Customers </h1>
+		<a href="main_page.html"> CBO YXE - CUSTOMERS</a>
 	</div>
 
 	<div class="navBar">
@@ -175,54 +175,56 @@
 		<li><a href="customer_page.html"> Customers </a></li>
 	</div>
 
-	<div id="customer_registration_div">
-		<form onsubmit="return register_customer()">
-			<label>Register New Customer</label><br><br>
-			<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name" required>
-			<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name" required>
-			<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)"
-				required>
-			<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
-			<button type="submit">Register</button><br><br><br><br>
-		</form>
+		<h2>Register New Customer</h2>
+	
+		<div id="customer_registration_div" class="container">
+			<form onsubmit="return register_customer()">
+				<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name" required>
+				<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name" required>
+				<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)"
+					required>
+				<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
+				<button type="submit">Register</button><br><br>
+			</form>
+		</div>
+		
+		<h2>Customer Display</h2>
+		
+		<div id="customer_display_div" class="container">
+			<table border="1px solid black" id="display_table" class="CBOTable">
+				<thead>
+					<th id="numCell">Customer ID</th>
+					<th id="infoCell">First Name</th>
+					<th id="infoCell">Last Name</th>
+					<th id="infoCell">Birthday</th>
+					<th id="dateCell">Address</th>
+					<th id="dateCell">Date Joined</th>
+				</thead>
+				<tbody id="display_tbody">
+				</tbody>
+			</table>
+		</div>
+
+		<div id="customer_edit_popup" class="popup">
+			<form onsubmit="return editCustomer()">
+				<h1 id="popup_header">Edit Staff </h1>
+				<label for="first_name">First Name</label>
+				<input id="first_name" type="text" name="first_name" required> <br><br>
+				<label for="last_name">Last Name</label>
+				<input id="last_name" type="text" name="last_name" required> <br><br>
+				<label for="birthday">Birthday</label>
+				<input id="birthday" type="text" name="birthday" required> <br><br>
+				<label for="address">Address</label>
+				<input id="address" type="text" name="address"> <br><br>
+				<input type="hidden" id="id" name="id">
+
+				<button type="button" onclick="deleteCustomer()">Delete Customer</button>
+				<button type="button" onclick="resetEdit()">Reset</button> <br><br>
+				<button type="submit">Submit</button>
+				<button type="button" onclick="closeEdit()">Close</button>
+			</form>
+		</div>
 	</div>
-
-	<div id="customer_display_div">
-		<label>Customer Display</label><br><br>
-		<table border="1px solid black" id="display_table" class="CBOTable">
-			<thead>
-				<th id="numCell">Customer ID</th>
-				<th id="infoCell">First Name</th>
-				<th id="infoCell">Last Name</th>
-				<th id="infoCell">Birthday</th>
-				<th id="dateCell">Address</th>
-				<th id="dateCell">Date Joined</th>
-			</thead>
-			<tbody id="display_tbody">
-			</tbody>
-		</table>
-	</div>
-
-	<div id="customer_edit_popup" class="popup">
-		<form onsubmit="return editCustomer()">
-			<h1 id="popup_header">Edit Staff </h1>
-			<label for="first_name">First Name</label>
-			<input id="first_name" type="text" name="first_name" required> <br><br>
-			<label for="last_name">Last Name</label>
-			<input id="last_name" type="text" name="last_name" required> <br><br>
-			<label for="birthday">Birthday</label>
-			<input id="birthday" type="text" name="birthday" required> <br><br>
-			<label for="address">Address</label>
-			<input id="address" type="text" name="address"> <br><br>
-			<input type="hidden" id="id" name="id">
-
-			<button type="button" onclick="deleteCustomer()">Delete Customer</button>
-			<button type="button" onclick="resetEdit()">Reset</button> <br><br>
-			<button type="submit">Submit</button>
-			<button type="button" onclick="closeEdit()">Close</button>
-		</form>
-	</div>
-
 
 </body>
 
