@@ -103,7 +103,7 @@ app.put('/editstaff', (req, res) => {
 /*  */
 app.delete('/deletestaff', (req, res) => {
 	var response = new Object();
-	var query_string = "DELETE FROM staff where ID=" + req.body.delete_id;
+	var query_string = "DELETE FROM staff where ID=" + req.body.delete_id + ", DELETE FROM reports where ID=" + req.body.delete_id + ";";
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
