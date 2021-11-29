@@ -75,7 +75,7 @@ app.post('/registerstaff', (req, res) => {
 	
 		staff.save()
 		.then((result) => {
-			response.answer = result;
+			response.answer = "Registration Success";
 			res.send(JSON.stringify(response));
 		})
 		.catch((err) => {
@@ -166,7 +166,7 @@ app.post('/registercustomer', (req, res) => {
 	
 		customer.save()
 		.then((result) => {
-			response.answer = result;
+			response.answer = "Registration Success";
 			res.send(JSON.stringify(response));
 		})
 		.catch((err) => {
@@ -257,7 +257,7 @@ app.post('/newreport', (req, res) => {
 	
 		report.save()
 		.then((result) => {
-			response.answer = result;
+			response.answer = "New report registered";
 			res.send(JSON.stringify(response));
 		})
 		.catch((err) => {
