@@ -240,7 +240,7 @@ app.put('/editcustomer', (req, res) => {
 
 app.post('/newreport', (req, res) => {
 	var response = new Object();
-	var query_string = `INSERT INTO reports (ID, report, date) VALUES (${req.body.id}, '${encodeURI(req.body.report)}', '${new Date()}');`;
+	var query_string = `INSERT INTO reports (ID, report, date) VALUES (${req.body.id}, '${req.body.report}', '${new Date()}');`;
 	config.query(query_string, function (err, result) {
 		if (err) {
 			console.log(err);
