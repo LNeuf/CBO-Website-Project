@@ -1,389 +1,217 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
-	<title> Customers </title>
-	<link rel="stylesheet" type="text/css" href="CBOStyle.css" />
+    <title> Staff </title>
+    <link rel="stylesheet" type="text/css" href="CBOStyle.css" />
 </head>
 
 <body>
-	<script>
-		setInterval(refresh_customer_list, 1000);
+    <script>
+        setInterval(refresh_staff_list, 1000);
 
-		function register_customer() {
-			var http = new XMLHttpRequest();
-			var url = '/registercustomer';
-			var message = "fname=" + document.getElementById("customer_fname").value + "&lname=" + document.getElementById("customer_lname").value + "&birthday=" + document.getElementById("customer_birthday").value + "&address=" + document.getElementById("customer_address").value;
+        function register_staff() {
+            var http = new XMLHttpRequest();
+            var url = '/registerstaff';
+            var message = "fname=" + document.getElementById("staff_fname").value + "&lname=" + document.getElementById("staff_lname").value + "&role=" + document.getElementById("staff_role").value;
 
-			http.open('POST', url, true);
+            http.open('POST', url, true);
 
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						alert(response.answer);
-					}
-					else {
-						alert("Registration failure!");
-					}
-				}
-			};
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        alert(response.answer);
+                    }
+                    else {
+                        alert("Registration failure!");
+                    }
+                }
+            };
 
-			http.send(message);
-		};
+            http.send(message);
+        };
 
-		function refresh_customer_list() {
+        function refresh_staff_list() {
 
-			var http = new XMLHttpRequest();
-			var url = '/refreshcustomers';
+            var http = new XMLHttpRequest();
+            var url = '/refreshstaff';
 
-			http.open('GET', url, true);
+            http.open('GET', url, true);
 
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						if (response.answer == "No customers!") {
-							document.getElementById("display_tbody").innerHTML = "";
-							document.getElementById("display_table").display = "none";
-						}
-						else {
-							document.getElementById("display_tbody").innerHTML = "";
-							var tbodyRef = document.getElementById("display_table").getElementsByTagName("tbody")[0];
-							for (let i = 0; i < response.answer.length; i++) {
-								var row = tbodyRef.insertRow();
-								var idcell = row.insertCell();
-								var fnameCell = row.insertCell();
-								var lnameCell = row.insertCell();
-								var birthdayCell = row.insertCell();
-								var addressCell = row.insertCell();
-								var dateCell = row.insertCell();
-								var editCell = row.insertCell();
-								var reportCell = row.insertCell();
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-								idcell.innerHTML = response.answer[i].ID;
-								fnameCell.innerHTML = response.answer[i].firstname;
-								lnameCell.innerHTML = response.answer[i].lastname;
-								birthdayCell.innerHTML = response.answer[i].birthday;
-								addressCell.innerHTML = response.answer[i].address;
-								dateCell.innerHTML = response.answer[i].joindate;
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        if (response.answer == "No staff!") {
+                            document.getElementById("display_tbody").innerHTML = "";
+                            document.getElementById("display_table").display = "none";
+                        }
+                        else {
+                            document.getElementById("display_tbody").innerHTML = "";
+                            var tbodyRef = document.getElementById("display_table").getElementsByTagName("tbody")[0];
+                            for (let i = 0; i < response.answer.length; i++) {
+                                var row = tbodyRef.insertRow();
+                                var idcell = row.insertCell();
+                                var fnameCell = row.insertCell();
+                                var lnameCell = row.insertCell();
+                                var roleCell = row.insertCell();
+                                var dateCell = row.insertCell();
+                                var editCell = row.insertCell();
 
-								var button_onclick = response.answer[i].ID + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].birthday + "', '" + response.answer[i].address + "'";
-								editCell.innerHTML = '<button id="' + response.answer[i].ID + '_button" name="' + response.answer[i].ID + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
+                                idcell.innerHTML = response.answer[i].id;
+                                fnameCell.innerHTML = response.answer[i].firstname;
+                                lnameCell.innerHTML = response.answer[i].lastname;
+                                roleCell.innerHTML = response.answer[i].role;
+                                dateCell.innerHTML = response.answer[i].joindate;
 
-								var report_onclick = `${response.answer[i].ID}`;
-								reportCell.innerHTML = `<button id="${response.answer[i].ID}_report_button" onclick="openReports(${report_onclick})">Reports</button>`;
-							}
-						}
-					}
-				}
-			};
-			http.send();
-		};
+                                var button_onclick = response.answer[i].id + ", '" + response.answer[i].firstname + "', '" + response.answer[i].lastname + "', '" + response.answer[i].role + "'";
+                                editCell.innerHTML = '<button id="' + response.answer[i].id + '_button" name="' + response.answer[i].id + '_button" onclick="openEdit(' + button_onclick + ')">Edit</button>';
+                            }
+                        }
+                    }
+                }
+            };
+            http.send();
+        };
 
-		function deleteCustomer() {
-			var http = new XMLHttpRequest();
-			var url = '/deletecustomer';
+        function deleteStaff() {
+            var http = new XMLHttpRequest();
+            var url = '/deletestaff';
 
-			var message = "delete_id=" + document.getElementById("id").value;
+            var message = "delete_id=" + document.getElementById("id").value;
 
-			http.open('DELETE', url, true);
+            http.open('DELETE', url, true);
 
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						alert(response.answer);
-						closeEdit();
-					}
-					else {
-						alert("Failed to delete");
-					}
-				}
-			};
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        alert(response.answer);
+                        closeEdit();
+                    }
+                    else {
+                        alert("Failed to delete");
+                    }
+                }
+            };
 
-			http.send(message);
-		};
+            http.send(message);
+        };
 
-		function editCustomer() {
-			var http = new XMLHttpRequest();
-			var url = '/editcustomer';
+        function editStaff() {
+            var http = new XMLHttpRequest();
+            var url = '/editstaff';
 
-			var message = "first_name=" + document.getElementById("first_name").value + "&last_name=" + document.getElementById("last_name").value + "&birthday=" + document.getElementById("birthday").value + "&address=" + document.getElementById("address").value + "&id=" + document.getElementById("id").value;
+            var message = "first_name=" + document.getElementById("first_name").value + "&last_name=" + document.getElementById("last_name").value + "&role=" + document.getElementById("role").value + "&id=" + document.getElementById("id").value;
 
-			http.open('PUT', url, true);
+            http.open('PUT', url, true);
 
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						alert(response.answer);
-						closeEdit();
-					}
-					else {
-						alert("Failed to delete");
-					}
-				}
-			};
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.status == 200) {
+                        var response = JSON.parse(http.responseText);
+                        alert(response.answer);
+                        closeEdit();
+                    }
+                    else {
+                        alert("Failed to delete");
+                    }
+                }
+            };
 
-			http.send(message);
-		};
+            http.send(message);
+        };
 
-		function getReports() {
-			var http = new XMLHttpRequest();
-			var url = '/getreports';
+        // Variables to reset the edit data
+        var first_name_mem;
+        var last_name_mem;
+        var role_mem;
 
-			var message = `customer_id=${document.getElementById("report_id").value}`;
-			http.open('POST', url, true);
+        function openEdit(staff_ID, first_name, last_name, role) {
+            first_name_mem = first_name;
+            last_name_mem = last_name;
+            role_mem = role;
 
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						if (response.answer == "No reports!") {
-							document.getElementById("report_tbody").innerHTML = "";
-							alert(response.answer);
-						}
-						else {
-							document.getElementById("report_tbody").innerHTML = "";
-							var tbodyRef = document.getElementById("report_table").getElementsByTagName("tbody")[0];
-							for (let i = 0; i < response.answer.length; i++) {
-								var row = tbodyRef.insertRow();
-								var idcell = row.insertCell();
-								var report_idCell = row.insertCell();
-								var reportcell = row.insertCell();
-								var dateCell = row.insertCell();
-								var deleteCell = row.insertCell();
+            document.getElementById("popup_header").innerText = "Edit Staff " + staff_ID;
+            document.getElementById("first_name").value = first_name;
+            document.getElementById("last_name").value = last_name;
+            document.getElementById("role").value = role;
+            document.getElementById("staff_edit_popup").style.display = "block";
+            document.getElementById("id").value = staff_ID;
+        }
 
-								idcell.innerHTML = response.answer[i].ID;
-								reportcell.innerHTML = response.answer[i].report;
-								dateCell.innerHTML = response.answer[i].date;
-								report_idCell.innerHTML = response.answer[i].report_id;
+        function closeEdit() {
+            document.getElementById("staff_edit_popup").style.display = "none";
+        }
 
-								var button_onclick = `${response.answer[i].report_id}`;
-								deleteCell.innerHTML = `<button id="${response.answer[i].ID}_report_button" onclick="deleteReport(${button_onclick})">Delete</button>`;
-							}
-						}
-					}
-					else {
-						alert("Failed to delete");
-					}
-				}
-			};
+        function resetEdit() {
+            document.getElementById("first_name").value = first_name_mem;
+            document.getElementById("last_name").value = last_name_mem;
+            document.getElementById("role").value = role_mem;
+        }
+    </script>
 
-			http.send(message);
-		};
+    <div class=header>
+        <a href="main_page.html"> CBO YXE - STAFF </a>
+    </div>
 
-		function sendReport() {
-			var http = new XMLHttpRequest();
-			var url = '/newreport';
-			var message = `id=${document.getElementById("report_id").value}&report=${document.getElementById("report_body").value}`;
-
-			http.open('POST', url, true);
-
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						alert(response.answer);
-						closeNewReport();
-					}
-					else {
-						alert("Report not submitted");
-					}
-				}
-			};
-
-			http.send(message);
-		};
-
-		function deleteReport(report_ID) {
-			var http = new XMLHttpRequest();
-			var url = '/deletereport';
-			var message = `report_id=${report_ID}`;
-			http.open('DELETE', url, true);
-
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			http.onreadystatechange = function () {
-				if (http.readyState == 4) {
-					if (http.status == 200) {
-						var response = JSON.parse(http.responseText);
-						alert(response.answer);
-						getReports();
-					}
-					else {
-						alert("Deletion Failed");
-					}
-				}
-			};
-
-			http.send(message);
-		};
-
-		// Variables to reset the edit data
-		var first_name_mem;
-		var last_name_mem;
-		var birthday_mem;
-		var address_mem;
-
-		function openEdit(ID, first_name, last_name, birthday, address) {
-			first_name_mem = first_name;
-			last_name_mem = last_name;
-			birthday_mem = birthday;
-			address_mem = address;
-
-			document.getElementById("popup_header").innerText = "Edit Customer " + ID;
-			document.getElementById("first_name").value = first_name;
-			document.getElementById("last_name").value = last_name;
-			document.getElementById("address").value = address;
-			document.getElementById("birthday").value = birthday;
-
-			document.getElementById("customer_edit_popup").style.display = "block";
-			document.getElementById("id").value = ID;
-		}
-
-		function closeEdit() {
-			document.getElementById("customer_edit_popup").style.display = "none";
-		}
-
-		function resetEdit() {
-			document.getElementById("first_name").value = first_name_mem;
-			document.getElementById("last_name").value = last_name_mem;
-			document.getElementById("address").value = address_mem;
-			document.getElementById("birthday").value = birthday_mem;
-		}
-
-		function openReports(ID) {
-			document.getElementById("report_menu_header").innerHTML = `Report Menu For Customer ID: ${ID}`;
-			document.getElementById("report_id").value = ID;
-			document.getElementById("customer_report_menu").style.display = "block";
-		}
-
-		function closeReports() {
-			document.getElementById("customer_report_menu").style.display = "none";
-		}
-
-		function viewReports() {
-			getReports();
-			document.getElementById("customer_report_view").style.display = "block";
-		}
-
-		function closeViewReports() {
-			document.getElementById("customer_report_view").style.display = "none";
-		}
-
-		function newReport() {
-			document.getElementById("customer_report_new").style.display = "block";
-		}
-
-		function closeNewReport() {
-			document.getElementById("customer_report_new").style.display = "none";
-		}
-
-	</script>
-
-	<div class=header>
-		<a href="main_page.html"> CBO YXE - CUSTOMERS</a>
-	</div>
-
-	<div class="navBar">
+    <div class="navBar">
 		<li><a href="staff_page.html"> Staff </a></li>
-		<li><a href="customer_page.html"> Customers </a></li>
+		<li><a href="customer_page.html"> Customers </a></li>	
 	</div>
-
-		<h2>Register New Customer</h2>
 	
-		<div id="customer_registration_div" class="container">
-			<form onsubmit="return register_customer()">
-				<input id="customer_fname" type="text" name="customer_fname" placeholder="First Name" required>
-				<input id="customer_lname" type="text" name="customer_fname" placeholder="Last Name" required>
-				<input id="customer_birthday" type="text" name="customer_birthday" placeholder="Birthdate (MM/DD/YYYY)"
-					required>
-				<input id="customer_address" type="text" name="customer_address" placeholder="Address"><br><br>
-				<button type="submit">Register</button><br><br>
-			</form>
-		</div>
-		
-		<h2>Customer Display</h2>
-		
-		<div id="customer_display_div" class="container">
-			<table border="1px solid black" id="display_table" class="CBOTable">
-				<thead>
-					<th id="numCell">Customer ID</th>
-					<th id="infoCell">First Name</th>
-					<th id="infoCell">Last Name</th>
-					<th id="infoCell">Birthday</th>
-					<th id="dateCell">Address</th>
-					<th id="dateCell">Date Joined</th>
-				</thead>
-				<tbody id="display_tbody">
-				</tbody>
-			</table>
-		</div>
-
-		<div id="customer_edit_popup" class="popup">
-			<form onsubmit="return editCustomer()">
-				<h1 id="popup_header">Edit Staff </h1>
-				<label for="first_name">First Name</label>
-				<input id="first_name" type="text" name="first_name" required> <br><br>
-				<label for="last_name">Last Name</label>
-				<input id="last_name" type="text" name="last_name" required> <br><br>
-				<label for="birthday">Birthday</label>
-				<input id="birthday" type="text" name="birthday" required> <br><br>
-				<label for="address">Address</label>
-				<input id="address" type="text" name="address"> <br><br>
-				<input type="hidden" id="id" name="id">
-
-				<button type="button" onclick="deleteCustomer()">Delete Customer</button>
-				<button type="button" onclick="resetEdit()">Reset</button> <br><br>
-				<button type="submit">Submit</button>
-				<button type="button" onclick="closeEdit()">Close</button>
-			</form>
-		</div>
-
-		<div id="customer_report_menu" class="popup">
-			<h1 id="report_menu_header">Report Menu</h1>
-			<button id="view_report_button" onclick="viewReports()">View Reports</button>
-			<button id="new_report_button" onclick="newReport()">Create New Report</button><br><br>
-			<button id="close_report_button" onclick="closeReports()">Close</button>
-			<input type="hidden" id="report_id" name="report_id">
-		</div>
-
-		<div id="customer_report_view" class="popup">
-			<table border="1px solid black" id="report_table" class="CBOTable">
-				<thead>
-					<th id="idCell">Customer ID</th>
-					<th id="report_id">Report ID</th>
-					<th id="reportCell">Report</th>
-					<th id="dateCell">Date</th>
-					<th></th>
-				</thead>
-				<tbody id="report_tbody">
-				</tbody>
-			</table>
-			<button type="button" onclick="closeViewReports()">Close</button>
-		</div>
-
-		<div id="customer_report_new" class="popup">
-			<form onsubmit="return sendReport()" id="report_form">
-				<h1 id="new_report_header">New Report </h1>
-				<textarea id="report_body" form="report_form" cols="50" rows="50" placeholder="Enter report..." required></textarea><br><br>
-				<button type="submit">Submit</button>
-				<button type="button" onclick="closeNewReport()">Close</button>
-			</form>
-			
-		</div>
+	<h2>Register New Staff</h2>
+	
+	<div id="staff_registration_div" class="container">
+		<form onsubmit="return register_staff()">
+			<input id="staff_fname" type="text" name="staff_fname" placeholder="First Name" required>
+			<input id="staff_lname" type="text" name="staff_lname" placeholder="Last Name" required>
+			<input id="staff_role" type="text" name="staff_role" placeholder="Role" required><br><br>
+			<button type="submit">Register</button><br><br>
+		</form>
 	</div>
 
-</body>
+	<h2>Staff Display</h2>
 
+	<div id="staff_display_div" class="container">
+		<table border="1px solid black" id="display_table" class="CBOTable">
+			<thead>
+				<th id="numCell">Staff ID</th>
+				<th id="infoCell">First Name</th>
+				<th id="infoCell">Last Name</th>
+				<th id="infoCell">Role</th>
+				<th id="dateCell">Date Joined</th>
+			</thead>
+			<tbody id="display_tbody">
+			</tbody>
+		</table>
+	</div>
+
+	<div id="staff_edit_popup" class="popup">
+		<form onsubmit="return editStaff()">
+			<h1 id="popup_header">Edit Staff </h1>
+			<label for="first_name">First Name</label>
+			<input id="first_name" type="text" name="first_name" required> <br><br>
+			<label for="last_name">Last Name</label>
+			<input id="last_name" type="text" name="last_name" required> <br><br>
+			<label for="role">Role</label>
+			<input id="role" type="text" name="role" required> <br><br>
+			<input type="hidden" id="id" name="id">
+
+			<button type="button" onclick="deleteStaff()">Delete Staff Member</button>
+			<button type="button" onclick="resetEdit()">Reset</button> <br><br>
+			<button type="submit">Submit</button>
+			<button type="button" onclick="closeEdit()">Close</button>
+		</form>
+	</div>
+	
+</body>
 </html>
