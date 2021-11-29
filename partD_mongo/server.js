@@ -39,13 +39,22 @@ const customerSchema = new mongoose.Schema({
 	joindate: String
 })
 
+const reportSchema = new mongoose.Schema({
+	ID: Number,
+	report_id: Number,
+	report: String,
+	date: String
+})
+
 const idSchema = new mongoose.Schema({
 	staffID: Number,
-	customerID: Number
+	customerID: Number,
+	reportID: Number
 });
 
 const staffModel = mongoose.model("staff", staffSchema);
 const customerModel = mongoose.model("customer", customerSchema);
+const reportModel = mongoose.model("report", reportSchema);
 const idModel = mongoose.model("id", idSchema);
 
 app.post('/registerstaff', (req, res) => {
@@ -229,6 +238,55 @@ app.put('/editcustomer', (req, res) => {
 		response.answer = "Error updating customer";
 		res.send(response);
 	})
+});
+
+app.post('/newreport', (req, res) => {
+	var response = new Object();
+	console.log(req.body.id);
+	idModel.find()
+	.then((result) => {
+		var reportID = result[0].reportID;
+		
+		// Register new report with ID
+		var report = new reportModel({
+			ID: req.body.id,
+			report_id: reportID,
+			report: req.body.report,
+			date: new Date()
+		});
+	
+		report.save()
+		.then((result) => {
+			response.answer = result;
+			res.send(JSON.stringify(response));
+		})
+		.catch((err) => {
+			console.log(err);
+			response.answer = "Report send Failure"
+		});
+
+		// Increment ID in database
+		idModel.findOneAndUpdate({reportID: result[0].reportID}, {$inc : {'reportID':1}})
+		.then((result) => {
+			console.log("Updated report ID");
+		})
+		.catch((err) => {
+			console.log(err);
+		})
+	})
+	.catch((err) => {
+		console.log(err);
+	})
+});
+
+app.post('/getreports', (req, res) => {
+	var response = new Object();
+	
+});
+
+app.delete('/deletereport', (req, res) => {
+	var response = new Object();
+	
 });
 
 
