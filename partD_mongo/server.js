@@ -40,7 +40,7 @@ const customerSchema = new mongoose.Schema({
 })
 
 const reportSchema = new mongoose.Schema({
-	ID: Number,
+	id: Number,
 	report_id: Number,
 	report: String,
 	date: String
@@ -249,7 +249,7 @@ app.post('/newreport', (req, res) => {
 		
 		// Register new report with ID
 		var report = new reportModel({
-			ID: req.body.id,
+			id: req.body.id,
 			report_id: reportID,
 			report: req.body.report,
 			date: new Date()
@@ -281,12 +281,30 @@ app.post('/newreport', (req, res) => {
 
 app.post('/getreports', (req, res) => {
 	var response = new Object();
-	
+	reportModel.find({id: req.body.customer_id})
+	.then((result) => {
+		response.answer = result;
+		res.send(response);
+	})
+	.catch((err) => {
+		console.log(err);
+		response.answer = "Refresh Failed";
+		res.send(response);
+	})
 });
 
 app.delete('/deletereport', (req, res) => {
 	var response = new Object();
-	
+	reportModel.deleteOne({request_id: req.body.report_id})
+	.then((result) => {
+		response.answer = "Deleted report with ID: " + req.body.report_id;
+		res.send(response);
+	})
+	.catch((err) => {
+		console.log(err);
+		response.answer = "Error deleting report";
+		res.send(response);
+	})
 });
 
 
