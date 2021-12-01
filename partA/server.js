@@ -209,6 +209,15 @@ app.delete('/deletecustomer', (req, res) => {
 			res.send(JSON.stringify(response));
 		}
 		else {
+			var query_string2 = `DELETE FROM reports where ID=${req.body.delete_id}`;
+			config.query(query_string2, function (err, result) {
+				if (err) {
+					console.log(err);
+				}
+				else {
+					console.log("Deleted reports associated with customer");
+				}
+			})
 			response.answer = "Customer with ID: " + req.body.delete_id + " deleted";
 			res.send(JSON.stringify(response));
 		}

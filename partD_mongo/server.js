@@ -209,6 +209,13 @@ app.delete('/deletecustomer', (req, res) => {
 	var response = new Object();
 	customerModel.deleteOne({id: req.body.delete_id})
 	.then((result) => {
+		reportModel.deleteMany({id: req.body.delete_id})
+		.then((result) => {
+			console.log("Deleted repots associated with customer");
+		})
+		.catch((err) => {
+			console.log(err);
+		})
 		response.answer = "Deleted customer with ID: " + req.body.delete_id;
 		res.send(response);
 	})
