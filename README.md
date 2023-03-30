@@ -9,6 +9,8 @@
 The targetted purpose of the website is to be a staff and customer management system for a Community Based Organization (CBO).
 This would include organizations like charities and non-profits so the customer in this case would be the benefactors of this organization's charity.
 
+Primary Responsibilities: Front-end programmer
+
 Main Page:
 ![image](https://user-images.githubusercontent.com/61331076/156946221-b8e79f05-5da0-4de6-96f2-8d617845f566.png)
 
